@@ -10,7 +10,6 @@ const Forgot = () => {
 
     const handleInputChange = (e) => {
 
-
     };
 
     const loginUser = (e) => {
