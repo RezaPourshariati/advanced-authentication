@@ -327,7 +327,8 @@ p {
 }
 
 .--btn:hover {
-    transform: translateY(-2px);
+    background: #03a5fc;
+    /*transform: translateY(-2px);*/
 }
 
 .--btn-lg {
@@ -497,8 +498,8 @@ ul {
 }
 
 a:hover {
-    /* color: var(--color-dark); */
-    font-size: 1.5rem;
+    color: orangered;
+    /*font-size: 1.5rem;*/ /* <--- */
 }
 
 .ql-editor {
