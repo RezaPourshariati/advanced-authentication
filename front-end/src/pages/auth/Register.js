@@ -20,19 +20,27 @@ const Register = () => {
     const [formData, setFormData] = useState(initialState);
     const {name, email, password, password2} = formData;
 
-    const [uppercase, setUppercase] = useState(true);
-    const [num, setNum] = useState(true);
-    const [specialCharacter, setSpecialCharacter] = useState(true);
-    const [passLength, setPassLength] = useState(true);
+    const [uppercase, setUppercase] = useState(false);
+    const [num, setNum] = useState(false);
+    const [specialCharacter, setSpecialCharacter] = useState(false);
+    const [passLength, setPassLength] = useState(false);
 
     const timesIcon = <FaTimes color='red' size={15}/>;
     const checkIcon = <BsCheck2All color='green' size={15}/>;
 
+    const [style, setStyle] = useState('#999');
+
     const switchIcon = (condition) => {
-        console.log(condition);
         if (condition) return checkIcon;
         return timesIcon;
     };
+
+    useEffect(() => {
+        if (password.length > 4 && !uppercase) setStyle('red');
+        if (password.length > 4 && !num) setStyle('red');
+        if (password.length > 4 && !specialCharacter) setStyle('red');
+        if (password.length > 4 && !passLength) setStyle('red');
+    }, [password, uppercase, num, specialCharacter, passLength]);
 
     const handleInputChange = (e) => {
         const name = e.target.name;
@@ -65,7 +73,7 @@ const Register = () => {
                 <Card>
                     <div className={styles.form}>
                         <div className='--flex-center'>
-                            <TiUserAddOutline size={35} color='#999'/>
+                            <TiUserAddOutline size={60} color='orangered'/>
                         </div>
                         <h2 style={{marginBottom: '4rem'}}>Register</h2>
 
@@ -83,25 +91,25 @@ const Register = () => {
                                 <ul className='form-list'>
                                     <li>
                                         <span className={styles.indicator}
-                                              style={{color: `${uppercase ? 'yellowgreen' : 'red'}`}}>
+                                              style={{color: `${uppercase ? 'yellowgreen' : `${style}`}`}}>
                                             {switchIcon(uppercase)} &nbsp; Lowercase and Uppercase
                                         </span>
                                     </li>
                                     <li>
                                         <span className={styles.indicator}
-                                              style={{color: `${num ? 'yellowgreen' : 'red'}`}}>
+                                              style={{color: `${num ? 'yellowgreen' : `${style}`}`}}>
                                             {switchIcon(num)} &nbsp; Number(0-9)
                                         </span>
                                     </li>
                                     <li>
                                         <span className={styles.indicator}
-                                              style={{color: `${specialCharacter ? 'yellowgreen' : 'red'}`}}>
+                                              style={{color: `${specialCharacter ? 'yellowgreen' : `${style}`}`}}>
                                             {switchIcon(specialCharacter)} &nbsp; Special Character(!@#$%^&*)
                                         </span>
                                     </li>
                                     <li>
                                         <span className={styles.indicator}
-                                              style={{color: `${passLength ? 'yellowgreen' : 'red'}`}}>
+                                              style={{color: `${passLength ? 'yellowgreen' : `${style}`}`}}>
                                             {switchIcon(passLength)} &nbsp; At least 8 Character
                                         </span>
                                     </li>

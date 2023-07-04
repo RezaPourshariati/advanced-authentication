@@ -25,7 +25,7 @@ const Login = () => {
                 <Card>
                     <div className={styles.form}>
                         <div className='--flex-center'>
-                            <BiLogIn size={35} color='#999'/>
+                            <BiLogIn size={40} color='#999'/>
                         </div>
                         <h2 style={{marginBottom: '2rem'}}>Login</h2>
                         <div className='--flex-center'>
