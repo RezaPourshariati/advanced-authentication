@@ -4,6 +4,8 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
+const userRoute = require('./routes/userRoute');
+const errorHandler = require('./middleware/errorMiddleware');
 
 const app = express();
 
@@ -18,9 +20,15 @@ app.use(cors({
 })); // cors help us prevent any conflict when we make a request from front-end to the back-end.
 
 
+// Routes
+app.use("/api/v1/users", userRoute);
+
 app.get('/', (req, res) => {
     res.send('Home Page');
 });
+
+// Error Middleware
+app.use(errorHandler);
 
 // --------------------------------------------------------------
 
@@ -30,7 +38,7 @@ const start = async () => {
     try {
         await mongoose.connect(process.env.MONGO_URI);
         console.log('Database Connected Successfully.');
-        app.listen(5000, () => console.log('Server is listening on port 3000....'));
+        app.listen(5000, () => console.log('Server is listening on port 5000....'));
     } catch (error) {
         console.log(error);
     }
