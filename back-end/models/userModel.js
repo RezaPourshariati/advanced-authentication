@@ -1,4 +1,6 @@
 const mongoose = require('mongoose');
+const bcrypt = require('bcryptjs');
+
 
 const userSchema = mongoose.Schema({
     name: {
@@ -40,7 +42,8 @@ const userSchema = mongoose.Schema({
     },
     isVerified: {
         type: Boolean,
-        required: false,
+        required: true,
+        default: false
     },
     userAgent: {
         type: Array,
@@ -51,6 +54,21 @@ const userSchema = mongoose.Schema({
     timestamps: true,
     minimize: false
 });
+
+
+// Encrypt Password Before Saving to Database:
+userSchema.pre("save", async function (next) {
+    if (!this.isModified("password")) return next();
+    // Hash password:
+    const salt = await bcrypt.genSalt(10);
+    this.password = await bcrypt.hash(this.password, salt); // hashed password
+    next();
+})
+
+// pre: for execute the function before saving to database!
+
+// NOTE: If the password has not been modified, the function returns without doing anything.
+// This job avoids hashing the password again and again every time the document is saved.
 
 
 const User = mongoose.model("User", userSchema);
@@ -65,4 +83,4 @@ module.exports = User;
 // with a Date, and which does all the work for you.
 
 // “minimize” is another option that tells Mongoose whether to remove empty objects from arrays when saving to MongoDB.
-// If set to false, empty objects will be saved2.
+// If set to false, empty objects will be saved.
