@@ -5,6 +5,7 @@ const bcrypt = require('bcryptjs');
 const parser = require('ua-parser-js');
 
 
+// Register User
 const registerUser = asyncHandler(async (req, res) => {
     const {name, email, password} = req.body;
 
@@ -53,7 +54,7 @@ const registerUser = asyncHandler(async (req, res) => {
     }
 });
 
-
+// Login User
 const loginUser = asyncHandler(async (req, res) => {
     const {email, password} = req.body;
 
@@ -95,8 +96,20 @@ const loginUser = asyncHandler(async (req, res) => {
         res.status(500);
         throw new Error("Something went wrong, please try again!");
     }
+});
 
+// Logout User
+const logoutUser = asyncHandler(async (req, res) => {
+    res.cookie("token", '', {
+        path: '/',
+        httpOnly: true,
+        expires: new Date(0),
+        sameSite: 'none',
+        secure: true
+    });
+
+    return res.status(200).json({massage: "Logout successful"});
 });
 
 
-module.exports = {registerUser, loginUser};
+module.exports = {registerUser, loginUser, logoutUser};
