@@ -111,5 +111,10 @@ const logoutUser = asyncHandler(async (req, res) => {
     return res.status(200).json({massage: "Logout successful"});
 });
 
+// Get User
+const getUser = asyncHandler(async (req, res) => {
+    res.status(200).json({message: "getUser"});
+});
 
-module.exports = {registerUser, loginUser, logoutUser};
+
+module.exports = {registerUser, loginUser, logoutUser, getUser};
