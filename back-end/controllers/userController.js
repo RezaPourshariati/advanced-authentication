@@ -3,6 +3,7 @@ const User = require('../models/userModel');
 const {generateToken} = require("../utils");
 const bcrypt = require('bcryptjs');
 const parser = require('ua-parser-js');
+const jwt = require('jsonwebtoken');
 
 
 // ------------ Register User
@@ -170,6 +171,7 @@ const deleteUser = asyncHandler(async (req, res) => {
 // ------------ Delete User
 const getUsers = asyncHandler(async (req, res) => {
     const users = await User.find().sort("-createdAt").select("-password");
+    // The minus sign [-createdAt] is used to sort the documents in reverse order (i.e., from newest to oldest)
     if (!users) {
         res.status(500);
         throw new Error("Something went wrong");
@@ -177,5 +179,39 @@ const getUsers = asyncHandler(async (req, res) => {
     res.status(200).json(users);
 });
 
+// Get Login Status --> function with boolean result
+const loginStatus = asyncHandler(async (req, res) => {
+    const token = req.cookies.token;
+    if (!token) return res.json(false);
 
-module.exports = {registerUser, loginUser, logoutUser, getUser, updateUser, deleteUser, getUsers};
+    // Verify token
+    const verified = jwt.verify(token, process.env.JWT_SECRET);
+    if (verified) return res.json(true);
+});
+
+// Upgrade User Role
+const upgradeUser = asyncHandler(async (req, res) => {
+    const {role, id} = req.body; // we can access user properties because we set user as a key in authMiddleware.
+    console.log(id);
+    const user = await User.findById(id);
+    if (!user) {
+        res.status(500);
+        throw new Error('User not found!');
+    }
+    user.role = role;
+    await user.save();
+
+    res.status(200).json({massage: `User role updated to ${role}`});
+});
+
+module.exports = {
+    registerUser,
+    loginUser,
+    logoutUser,
+    getUser,
+    updateUser,
+    deleteUser,
+    getUsers,
+    loginStatus,
+    upgradeUser
+};

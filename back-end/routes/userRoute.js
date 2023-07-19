@@ -7,7 +7,9 @@ const {
     getUser,
     updateUser,
     deleteUser,
-    getUsers
+    getUsers,
+    loginStatus,
+    upgradeUser
 } = require("../controllers/userController");
 const router = express.Router();
 
@@ -20,6 +22,8 @@ router.patch('/updateUser', protect, updateUser);
 
 router.delete('/:id', protect, adminOnly, deleteUser);
 router.get('/getUsers', protect, authorOnly, getUsers);
+router.get('/loginStatus', loginStatus);
+router.post('/upgradeUser', protect, adminOnly, upgradeUser);
 
 
 module.exports = router;
