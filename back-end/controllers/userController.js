@@ -4,6 +4,7 @@ const {generateToken} = require("../utils");
 const bcrypt = require('bcryptjs');
 const parser = require('ua-parser-js');
 const jwt = require('jsonwebtoken');
+const sendEmail = require("../utils/sendEmail");
 
 
 // ------------ Register User
@@ -168,9 +169,9 @@ const deleteUser = asyncHandler(async (req, res) => {
     res.status(200).json({massage: "User deleted successfully"});
 });
 
-// ------------ Delete User
+// ------------ Get All Users
 const getUsers = asyncHandler(async (req, res) => {
-    const users = await User.find().sort("-createdAt").select("-password");
+    const users = await User.find().sort("-createdAt").select("-password"); // Except Password
     // The minus sign [-createdAt] is used to sort the documents in reverse order (i.e., from newest to oldest)
     if (!users) {
         res.status(500);
@@ -179,7 +180,7 @@ const getUsers = asyncHandler(async (req, res) => {
     res.status(200).json(users);
 });
 
-// Get Login Status --> function with boolean result
+// ------------ Get Login Status --> function with boolean result
 const loginStatus = asyncHandler(async (req, res) => {
     const token = req.cookies.token;
     if (!token) return res.json(false);
@@ -189,19 +190,48 @@ const loginStatus = asyncHandler(async (req, res) => {
     if (verified) return res.json(true);
 });
 
-// Upgrade User Role
+// ------------ Upgrade User Role
 const upgradeUser = asyncHandler(async (req, res) => {
     const {role, id} = req.body; // we can access user properties because we set user as a key in authMiddleware.
     console.log(id);
     const user = await User.findById(id);
     if (!user) {
-        res.status(500);
+        res.status(404);
         throw new Error('User not found!');
     }
     user.role = role;
     await user.save();
 
     res.status(200).json({massage: `User role updated to ${role}`});
+});
+
+// Send Automated Emails
+const sendAutomatedEmail = asyncHandler( async (req, res) => {
+    const {subject, send_to, reply_to, template, url} = req.body;
+
+    if (!subject || !send_to || !reply_to || !template) {
+        res.status(500);
+        throw new Error(("Missing email parameter"));
+    }
+
+    // Get user
+    const user = await User.findOne({email: send_to});
+
+    if (!user) {
+        res.status(404);
+        throw new Error("User not found");
+    }
+    const sent_from = process.env.EMAIL_USER;
+    const name = user.name;
+    const link = `${process.env.FRONTEND_URL}${url}`; // Frontend URL: http://localhost:3000
+
+    try {
+        await sendEmail(subject, send_to, sent_from, reply_to, template, name, link);
+        res.status(200).json({massage: "Email Sent"});
+    } catch (error) {
+        res.status(500);
+        throw new Error("Email not sent, please try again");
+    }
 });
 
 module.exports = {
@@ -213,5 +243,6 @@ module.exports = {
     deleteUser,
     getUsers,
     loginStatus,
-    upgradeUser
+    upgradeUser,
+    sendAutomatedEmail
 };
