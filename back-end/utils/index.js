@@ -1,7 +1,13 @@
 const jwt = require("jsonwebtoken");
+const crypto = require('crypto');
 
 const generateToken = (id) => {
     return jwt.sign({id}, process.env.JWT_SECRET, {expiresIn: "1d"});
 };
 
-module.exports = {generateToken};
+// Hash Token ---> hashing tokens before it saves to the database.
+const hashToken = (token) => {
+    return crypto.createHash("sha256").update(token.toString()).digest("hex");
+};
+
+module.exports = {generateToken, hashToken};

@@ -10,7 +10,8 @@ const {
     getUsers,
     loginStatus,
     upgradeUser,
-    sendAutomatedEmail
+    sendAutomatedEmail,
+    sendVerificationEmail
 } = require("../controllers/userController");
 const router = express.Router();
 
@@ -26,6 +27,7 @@ router.get('/getUsers', protect, authorOnly, getUsers);
 router.get('/loginStatus', loginStatus);
 router.post('/upgradeUser', protect, adminOnly, upgradeUser);
 router.post('/sendAutomatedEmail', protect, sendAutomatedEmail);
+router.post('/sendVerificationEmail', protect, sendVerificationEmail);
 
 
 module.exports = router;
