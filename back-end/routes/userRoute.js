@@ -13,7 +13,8 @@ const {
     sendAutomatedEmail,
     sendVerificationEmail,
     verifyUser,
-    forgotPassword
+    forgotPassword,
+    resetPassword
 } = require("../controllers/userController");
 const router = express.Router();
 
@@ -32,6 +33,7 @@ router.post('/sendAutomatedEmail', protect, sendAutomatedEmail);
 router.post('/sendVerificationEmail', protect, sendVerificationEmail);
 router.patch('/verifyUser/:verificationToken', verifyUser); // protect removed, user want to verify from phone.
 router.post('/forgotPassword', forgotPassword);
+router.patch('/resetPassword/:resetToken', resetPassword);
 
 
 module.exports = router;

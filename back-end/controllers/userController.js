@@ -76,7 +76,7 @@ const loginUser = asyncHandler(async (req, res) => {
         throw new Error("User not found, Please signup");
     }
 
-    const passwordIsCorrect = bcrypt.compare(password, user.password);
+    const passwordIsCorrect = await bcrypt.compare(password, user.password);
     if (!passwordIsCorrect) {
         res.status(400);
         throw new Error("Invalid email or password");
@@ -296,7 +296,7 @@ const verifyUser = asyncHandler(async (req, res) => {
     const {verificationToken} = req.params;
 
     const hashedToken = hashToken(verificationToken);
-    console.log(hashedToken);
+    // console.log(hashedToken);
 
     const userToken = await Token.findOne({
         verificationToken: hashedToken,
@@ -371,7 +371,33 @@ const forgotPassword = asyncHandler(async (req, res) => {
         res.status(500);
         throw new Error("Email not sent, please try again");
     }
+});
 
+// ------------ Reset Password
+const resetPassword = asyncHandler(async (req, res) => {
+    const {resetToken} = req.params;
+    const {password} = req.body;
+
+    const hashedToken = hashToken(resetToken);
+
+    const userToken = await Token.findOne({
+        resetToken: hashedToken,
+        expiresAt: {$gt: Date.now()}
+    });
+
+    if (!userToken) {
+        res.status(404);
+        throw new Error("Invalid or Expired Token");
+    }
+
+    // Find User
+    const user = await User.findOne({_id: userToken.userId});
+
+    // Now Reset Password
+    user.password = password;
+    await user.save();
+
+    res.status(200).json({message: "Password reset was successful, Please login"});
 });
 
 module.exports = {
@@ -387,5 +413,6 @@ module.exports = {
     sendAutomatedEmail,
     sendVerificationEmail,
     verifyUser,
-    forgotPassword
+    forgotPassword,
+    resetPassword
 };
