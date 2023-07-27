@@ -58,6 +58,7 @@ const registerUser = asyncHandler(async (req, res) => {
     }
 });
 // ---> After Register here Function: sendVerificationEmail()
+// ---> After sendVerificationEmail() : verifyUser()
 
 // ------------ Login User
 const loginUser = asyncHandler(async (req, res) => {
@@ -168,7 +169,7 @@ const deleteUser = asyncHandler(async (req, res) => {
         throw new Error("User not found");
     }
 
-    await user.deleteOne();
+    await user.deleteOne(); // .remove() not work
     res.status(200).json({massage: "User deleted successfully"});
 });
 
@@ -195,8 +196,8 @@ const loginStatus = asyncHandler(async (req, res) => {
 
 // ------------ Upgrade User Role
 const upgradeUser = asyncHandler(async (req, res) => {
-    const {role, id} = req.body; // we can access user properties because we set user as a key in authMiddleware.
-    console.log(id);
+    const {id, role} = req.body; // we can access user properties because we set user as a key in authMiddleware.
+    // console.log(id); // shows ID like this: 64b3e4a5575ba351211872ac
     const user = await User.findById(id);
     if (!user) {
         res.status(404);
@@ -209,7 +210,7 @@ const upgradeUser = asyncHandler(async (req, res) => {
 });
 
 // ------------ Send Automated Emails
-const sendAutomatedEmail = asyncHandler( async (req, res) => {
+const sendAutomatedEmail = asyncHandler(async (req, res) => {
     const {subject, send_to, reply_to, template, url} = req.body;
 
     if (!subject || !send_to || !reply_to || !template) {
@@ -238,7 +239,7 @@ const sendAutomatedEmail = asyncHandler( async (req, res) => {
 });
 
 // ------------ Send Verification Email
-const sendVerificationEmail = asyncHandler( async (req, res) => {
+const sendVerificationEmail = asyncHandler(async (req, res) => {
     const user = await User.findById(req.user._id);
 
     if (!user) {
@@ -266,7 +267,7 @@ const sendVerificationEmail = asyncHandler( async (req, res) => {
         userId: user._id,
         verificationToken: hashedToken,
         createdAt: Date.now(),
-        expiresAt: Date.now() + 60 * (60*1000) // 60-Min(1-hour)
+        expiresAt: Date.now() + 60 * (60 * 1000) // 60-Min(1-hour)
     }).save();
 
     // Construct Verification URL ---> Sending for User
@@ -283,11 +284,94 @@ const sendVerificationEmail = asyncHandler( async (req, res) => {
 
     try {
         await sendEmail(subject, send_to, sent_from, reply_to, template, name, link);
-        res.status(200).json({massage: "Email Sent"});
+        res.status(200).json({massage: "Verification Email Sent"});
     } catch (error) {
         res.status(500);
         throw new Error("Email not sent, please try again");
     }
+});
+
+// ------------ Verify User
+const verifyUser = asyncHandler(async (req, res) => {
+    const {verificationToken} = req.params;
+
+    const hashedToken = hashToken(verificationToken);
+    console.log(hashedToken);
+
+    const userToken = await Token.findOne({
+        verificationToken: hashedToken,
+        expiresAt: {$gt: Date.now()}
+    });
+
+    if (!userToken) {
+        res.status(404);
+        throw new Error("Invalid or Expired Token");
+    }
+
+    // Find User
+    const user = await User.findOne({_id: userToken.userId});
+
+    if (user.isVerified) {
+        res.status(400);
+        throw new Error("User is already verified");
+    }
+
+    // Now Verify User
+    user.isVerified = true;
+    await user.save();
+
+    res.status(200).json({message: "Account verification was successful"});
+});
+
+// ------------ Forgot Password
+const forgotPassword = asyncHandler(async (req, res) => {
+    const {email} = req.body;
+
+    const user = await User.findOne(email);
+
+    if (!user) {
+        res.status(404);
+        throw new Error("There is no user with this email");
+    }
+
+    // Delete Token if it exists in DB
+    let token = await Token.findOne({userId: user._id}); // Token is from tokenModel.js file
+    if (token) await token.deleteOne();
+
+    // Create Verification Token and Save to DB
+    const resetToken = crypto.randomBytes(32).toString("hex") + user._id;
+    console.log(resetToken);
+
+    // Hash Token and Save to DB
+    const hashedToken = hashToken(resetToken);
+
+    await new Token({
+        userId: user._id,
+        resetToken: hashedToken,
+        createdAt: Date.now(),
+        expiresAt: Date.now() + 60 * (60 * 1000) // 60-Min(1-hour)
+    }).save();
+
+    // Construct Reset URL ---> Sending for User
+    const resetUrl = `${process.env.FRONTEND_URL}/resetPassword/${resetToken}`;
+
+    // Send Verification Email
+    const subject = "Password Reset Request - AUTH:REZA";
+    const send_to = user.email;
+    const sent_from = process.env.EMAIL_USER;
+    const reply_to = "rezanoreply@rezapshr.com";
+    const template = "forgotPassword";
+    const name = user.name;
+    const link = resetUrl;
+
+    try {
+        await sendEmail(subject, send_to, sent_from, reply_to, template, name, link);
+        res.status(200).json({massage: "Password Reset Email Sent"});
+    } catch (error) {
+        res.status(500);
+        throw new Error("Email not sent, please try again");
+    }
+
 });
 
 module.exports = {
@@ -301,5 +385,7 @@ module.exports = {
     loginStatus,
     upgradeUser,
     sendAutomatedEmail,
-    sendVerificationEmail
+    sendVerificationEmail,
+    verifyUser,
+    forgotPassword
 };

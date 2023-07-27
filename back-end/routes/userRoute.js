@@ -11,7 +11,9 @@ const {
     loginStatus,
     upgradeUser,
     sendAutomatedEmail,
-    sendVerificationEmail
+    sendVerificationEmail,
+    verifyUser,
+    forgotPassword
 } = require("../controllers/userController");
 const router = express.Router();
 
@@ -28,6 +30,8 @@ router.get('/loginStatus', loginStatus);
 router.post('/upgradeUser', protect, adminOnly, upgradeUser);
 router.post('/sendAutomatedEmail', protect, sendAutomatedEmail);
 router.post('/sendVerificationEmail', protect, sendVerificationEmail);
+router.patch('/verifyUser/:verificationToken', verifyUser); // protect removed, user want to verify from phone.
+router.post('/forgotPassword', forgotPassword);
 
 
 module.exports = router;
