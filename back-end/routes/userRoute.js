@@ -14,7 +14,8 @@ const {
     sendVerificationEmail,
     verifyUser,
     forgotPassword,
-    resetPassword
+    resetPassword,
+    changePassword
 } = require("../controllers/userController");
 const router = express.Router();
 
@@ -34,6 +35,7 @@ router.post('/sendVerificationEmail', protect, sendVerificationEmail);
 router.patch('/verifyUser/:verificationToken', verifyUser); // protect removed, user want to verify from phone.
 router.post('/forgotPassword', forgotPassword);
 router.patch('/resetPassword/:resetToken', resetPassword);
+router.patch('/changePassword', protect, changePassword);
 
 
 module.exports = router;

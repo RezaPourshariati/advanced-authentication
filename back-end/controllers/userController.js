@@ -400,6 +400,34 @@ const resetPassword = asyncHandler(async (req, res) => {
     res.status(200).json({message: "Password reset was successful, Please login"});
 });
 
+// ------------ Change Password
+const changePassword = asyncHandler(async (req, res) => {
+    const {oldPassword, password} = req.body;
+    const user = await User.findById(req.user._id);
+
+    if (!user) {
+        res.status(404);
+        throw new Error("User not found");
+    }
+
+    if (!oldPassword || !password) {
+        res.status(400);
+        throw new Error("Please enter old and new password");
+    }
+
+    // Check if old password is correct
+    const passwordIsCorrect = await bcrypt.compare(oldPassword, user.password);
+
+    // Save New Password
+    if (user && passwordIsCorrect) {
+        user.password = password;
+        await user.save();
+        res.status(200).json({message: "Password changed successfully, please login again."});
+    } else {
+        res.status(400);
+        throw new Error("Old password is incorrect");
+    }
+});
 module.exports = {
     registerUser,
     loginUser,
@@ -414,5 +442,6 @@ module.exports = {
     sendVerificationEmail,
     verifyUser,
     forgotPassword,
-    resetPassword
+    resetPassword,
+    changePassword
 };
