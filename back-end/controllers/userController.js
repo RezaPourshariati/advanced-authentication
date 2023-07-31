@@ -7,7 +7,9 @@ const jwt = require('jsonwebtoken');
 const sendEmail = require("../utils/sendEmail");
 const Token = require("../models/tokenModel");
 const crypto = require('crypto');
+const Cryptr = require('cryptr');
 
+const cryptr = new Cryptr(process.env.CRYPTR_KEY);
 
 // ------------ Register User
 const registerUser = asyncHandler(async (req, res) => {
@@ -82,7 +84,37 @@ const loginUser = asyncHandler(async (req, res) => {
         throw new Error("Invalid email or password");
     }
 
-    // Trigger 2 Factor unknown UserAgent
+    // Trigger 2 Factor unknown UserAgent [69]
+    const ua = parser(req.headers["user-agent"]);
+    const thisUserAgent = ua.ua;
+    console.log(thisUserAgent);
+    const allowedAgent = user.userAgent.includes((thisUserAgent));
+
+    if (!allowedAgent) {
+        // Generate 6 digit code
+        const loginCode = Math.floor(100000 + Math.random() * 900000);
+        console.log(loginCode);
+        // Math.floor(Math.random() * (max - min)) + min;
+
+        // Encrypt login code before saving to DB
+        const encryptedLoginCode = cryptr.encrypt(loginCode.toString());
+
+        // Delete Token if it exists in DB [69]
+        let userToken = await Token.findOne({userId: user._id}); // Token is from tokenModel.js file
+        if (userToken) await userToken.deleteOne();
+
+        // Save Token to DB
+        await new Token({
+            userId: user._id,
+            loginToken: encryptedLoginCode,
+            createdAt: Date.now(),
+            expiresAt: Date.now() + 60 * (60 * 1000) // 60-Min(1-hour)
+        }).save();
+
+        res.status(400);
+        throw new Error("Check your email for login code");
+    }
+
 
     // Generate Token
     const token = generateToken(user._id);
@@ -428,6 +460,8 @@ const changePassword = asyncHandler(async (req, res) => {
         throw new Error("Old password is incorrect");
     }
 });
+
+
 module.exports = {
     registerUser,
     loginUser,
