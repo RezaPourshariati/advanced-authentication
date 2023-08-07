@@ -112,7 +112,7 @@ const loginUser = asyncHandler(async (req, res) => {
         }).save();
 
         res.status(400);
-        throw new Error("Check your email for login code");
+        throw new Error("New browser or device detected.");
     }
 
 
@@ -470,20 +470,21 @@ const sendLoginCode = asyncHandler(async (req, res) => {
         res.status(404);
         throw new Error("User not found");
     }
+    // console.log(user._id); ---> new ObjectId("64b3e4a5575ba351211872ac")
 
     // Find Login Code in DB
     let userToken = await Token.findOne({
         userId: user._id,
         expiresAt: {$gt: Date.now()}
     });
+    // console.log(userToken);
 
     if (!userToken) {
         res.status(404);
-        throw new Error("Invalid or Expired token, please login again");
+        throw new Error("Invalid or Expired Token, please login again");
     }
 
     const loginCode = userToken.loginToken;
-
     const decryptedLoginCode = cryptr.decrypt(loginCode);
 
     // Send Login Code
@@ -504,6 +505,58 @@ const sendLoginCode = asyncHandler(async (req, res) => {
     }
 });
 
+// ------------ Login With Code ---> login with 6-digit access code that user enter.
+const loginWithCode = asyncHandler(async (req, res) => {
+    const {email} = req.params;
+    const {loginCode} = req.body;
+
+    const user = await User.findOne({email});
+
+    if (!user) {
+        res.status(404);
+        throw new Error("User not found");
+    }
+
+    // Find User Login Token
+    const userToken = await Token.findOne({
+        userId: user._id,
+        expiresAt: {$gt: Date.now()}
+    });
+
+    if (!userToken) {
+        res.status(404);
+        throw new Error("Invalid or Expired Token, please login again");
+    }
+
+    const decryptedLoginCode = cryptr.decrypt(userToken.loginToken);
+
+    if (loginCode !== decryptedLoginCode) {
+        res.status(400);
+        throw new Error("Incorrect login code, please try again");
+    } else {
+        // Register User-Agent
+        const ua = parser(req.headers["user-agent"]);
+        const thisUserAgent = ua.ua;
+        user.userAgent.push(thisUserAgent);
+        await user.save();
+
+        // Generate Token
+        const token = generateToken(user._id);
+
+        // Send HTTP-only Cookie
+        res.cookie("token", token, {
+            path: '/',
+            httpOnly: true,
+            expires: new Date(Date.now() + 1000 * 86400), // 1 day
+            sameSite: 'none',
+            secure: true
+        });
+
+        const {_id, name, email, phone, bio, photo, role, isVerified} = user;
+        res.status(201).json({_id, name, email, phone, bio, photo, role, isVerified, token});
+    }
+});
+
 
 module.exports = {
     registerUser,
@@ -521,5 +574,6 @@ module.exports = {
     forgotPassword,
     resetPassword,
     changePassword,
-    sendLoginCode
+    sendLoginCode,
+    loginWithCode
 };
