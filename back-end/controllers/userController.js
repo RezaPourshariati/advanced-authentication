@@ -522,6 +522,7 @@ const loginWithCode = asyncHandler(async (req, res) => {
         userId: user._id,
         expiresAt: {$gt: Date.now()}
     });
+    // console.log(user._id);
 
     if (!userToken) {
         res.status(404);
