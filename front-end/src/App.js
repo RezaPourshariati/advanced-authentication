@@ -10,12 +10,18 @@ import Verify from "./pages/auth/Verify";
 import Profile from "./pages/profile/Profile";
 import ChangePassword from "./pages/changePassword/ChangePassword";
 import UserList from "./pages/userList/UserList";
+import axios from "axios";
+import {ToastContainer} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+axios.defaults.withCredentials = true;
 
 
 function App() {
     return (
         <>
             <BrowserRouter>
+                <ToastContainer/>
                 <Routes>
                     <Route path='/' element={<Layout><Home/></Layout>}/>
                     <Route path='/login' element={<Login/>}/>
