@@ -291,7 +291,9 @@ export const loginWithGoogle = createAsyncThunk(
 );
 
 const authSlice = createSlice({
-    name: "auth", initialState, reducers: {
+    name: "auth",
+    initialState,
+    reducers: {
         RESET(state) {
             state.twoFactor = false;
             state.isError = false;
@@ -330,7 +332,7 @@ const authSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-            // Register User
+            // ------------ Register User
             .addCase(register.pending, (state) => {
                 state.isLoading = true;
             })
@@ -349,7 +351,7 @@ const authSlice = createSlice({
                 state.user = null;
                 toast.error(action.payload);
             })
-            // Login User
+            // ------------ Login User
             .addCase(login.pending, (state) => {
                 state.isLoading = true;
             })
