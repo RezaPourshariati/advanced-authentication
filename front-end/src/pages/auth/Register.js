@@ -1,7 +1,6 @@
 import {useEffect, useState} from "react";
 import Card from "../../components/card/Card";
-import styles from './auth.module.scss';
-// import './auth.module.scss';
+import styles from './auth.module.scss'; // import './auth.module.scss';
 import {Link, useNavigate} from "react-router-dom";
 import PasswordInput from "../../components/passwordInput/PasswordInput";
 import {TiUserAddOutline} from "react-icons/ti";

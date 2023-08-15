@@ -1,27 +1,56 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import Card from "../../components/card/Card";
 import {BiLogIn} from "react-icons/bi";
-import styles from './auth.module.scss';
-import {Link} from "react-router-dom";
+import styles from './auth.module.scss'; // import './auth.module.scss';
+import {Link, useNavigate} from "react-router-dom";
 import PasswordInput from "../../components/passwordInput/PasswordInput";
-// import './auth.module.scss';
+import {useDispatch, useSelector} from "react-redux";
+import {toast} from "react-toastify";
+import {validateEmail} from "../../redux/features/auth/authService";
+import {login, register, RESET} from "../../redux/features/auth/authSlice";
+import Loader from "../../components/loader/Loader";
+
+
+const initialState = {
+    email: "",
+    password: ""
+};
 
 const Login = () => {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+    const [formData, setFormData] = useState(initialState);
+    const {email, password} = formData;
 
     const handleInputChange = (e) => {
-
-
+        const name = e.target.name;
+        const value = e.target.value;
+        setFormData({...formData, [name]: value}); // Dynamic assign
     };
 
-    const loginUser = (e) => {
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
+    const {isLoading, isLoggedIn, isSuccess, message} = useSelector((state) => state.auth);
+
+    const loginUser = async (e) => {
         e.preventDefault();
+
+        if (!email || !password) toast.error("All field are required");
+        if (!validateEmail(email)) toast.error("Please enter a valid email");
+
+        const userData = {email, password};
+        // console.log(userData);
+        await dispatch(login(userData));
     };
+
+    useEffect(() => {
+        if (isSuccess && isLoggedIn) navigate("/profile");
+        dispatch(RESET());
+    }, [isLoggedIn, isSuccess, dispatch, navigate]);
 
     return (
         <>
             <div className={`container ${styles.auth}`}>
+                {isLoading && <Loader/>}
                 <Card>
                     <div className={styles.form}>
                         <div className='--flex-center'>
