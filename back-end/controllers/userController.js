@@ -146,7 +146,7 @@ const logoutUser = asyncHandler(async (req, res) => {
         secure: true
     });
 
-    return res.status(200).json({massage: "Logout successful"});
+    return res.status(200).json({message: "Logout successful"});
 });
 
 // ------------ Get User
