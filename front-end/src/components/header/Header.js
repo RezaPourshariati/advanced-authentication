@@ -3,13 +3,22 @@ import {BiLogIn} from "react-icons/bi";
 import {FaUserCircle} from "react-icons/fa";
 import {Link, NavLink} from "react-router-dom";
 import {useNavigate} from "react-router-dom";
+import {useDispatch} from "react-redux";
+import {logout, RESET} from "../../redux/features/auth/authSlice";
 
 const Header = () => {
 
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const goHome = () => {
         navigate('/');
+    };
+
+    const logoutUser = async () => {
+        dispatch(RESET());
+        await dispatch(logout());
+        navigate("/login");
     };
 
     return (
@@ -32,10 +41,11 @@ const Header = () => {
                             </button>
                         </li>
                         <li>
-                            <NavLink to='/profile' className={({isActive}) => isActive ? 'active' : ''}>Profile</NavLink>
+                            <NavLink to='/profile'
+                                     className={({isActive}) => isActive ? 'active' : ''}>Profile</NavLink>
                         </li>
                         <li>
-                            <button className='--btn --btn-secondary'>Logout</button>
+                            <button className='--btn --btn-secondary' onClick={logoutUser}>Logout</button>
                         </li>
                     </ul>
                 </nav>

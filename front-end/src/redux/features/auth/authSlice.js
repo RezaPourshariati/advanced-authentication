@@ -48,16 +48,11 @@ export const logout = createAsyncThunk("auth/logout", async (_, thunkAPI) => {
 });
 
 // --------------- Get Login Status
-export const getLoginStatus = createAsyncThunk(
-    "auth/getLoginStatus",
-    async (_, thunkAPI) => {
+export const getLoginStatus = createAsyncThunk("auth/getLoginStatus", async (_, thunkAPI) => {
         try {
             return await authService.getLoginStatus();
         } catch (error) {
-            const message =
-                (error.response &&
-                    error.response.data &&
-                    error.response.data.message) ||
+            const message = (error.response && error.response.data && error.response.data.message) ||
                 error.message ||
                 error.toString();
             return thunkAPI.rejectWithValue(message);
@@ -361,7 +356,6 @@ const authSlice = createSlice({
                 state.isLoggedIn = true;
                 state.user = action.payload;
                 toast.success("Login Successful");
-                console.log(action.payload);
             })
             .addCase(login.rejected, (state, action) => {
                 state.isLoading = false;
@@ -374,7 +368,7 @@ const authSlice = createSlice({
                 }
             })
 
-            // Logout User
+            // ------------ Logout User
             .addCase(logout.pending, (state) => {
                 state.isLoading = true;
             })
@@ -392,7 +386,7 @@ const authSlice = createSlice({
                 toast.error(action.payload);
             })
 
-            // Get Login Status
+            // ------------ Get Login Status
             .addCase(getLoginStatus.pending, (state) => {
                 state.isLoading = true;
             })
@@ -409,7 +403,7 @@ const authSlice = createSlice({
                 console.log(action.payload);
             })
 
-            // Get User
+            // ------------ Get User
             .addCase(getUser.pending, (state) => {
                 state.isLoading = true;
             })
@@ -426,7 +420,7 @@ const authSlice = createSlice({
                 toast.error(action.payload);
             })
 
-            // Update user
+            // ------------ Update user
             .addCase(updateUser.pending, (state) => {
                 state.isLoading = true;
             })
