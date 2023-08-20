@@ -16,7 +16,7 @@ const initialState = {
 };
 
 const Profile = () => {
-    useRedirectLoggedOutUser("/login");
+    useRedirectLoggedOutUser("/login"); // Our Custom Hook
     const [profile, setProfile] = useState(initialState);
 
     const handleImageChange = () => {

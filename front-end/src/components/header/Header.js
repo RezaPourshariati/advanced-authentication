@@ -5,6 +5,7 @@ import {Link, NavLink} from "react-router-dom";
 import {useNavigate} from "react-router-dom";
 import {useDispatch} from "react-redux";
 import {logout, RESET} from "../../redux/features/auth/authSlice";
+import {ShowOnLogin, ShowOnLogout} from "../protect/hiddenLink";
 
 const Header = () => {
 
@@ -31,22 +32,28 @@ const Header = () => {
                     </div>
 
                     <ul className='home-links'>
-                        <li className='--flex-center'>
-                            <FaUserCircle size={20}/>
-                            <p className='--color-white'>Hi, Reza</p>
-                        </li>
-                        <li>
-                            <button className='--btn --btn-primary'>
-                                <Link to='/login'>Login</Link>
-                            </button>
-                        </li>
-                        <li>
-                            <NavLink to='/profile'
-                                     className={({isActive}) => isActive ? 'active' : ''}>Profile</NavLink>
-                        </li>
-                        <li>
-                            <button className='--btn --btn-secondary' onClick={logoutUser}>Logout</button>
-                        </li>
+                        <ShowOnLogin>
+                            <li className='--flex-center'>
+                                <FaUserCircle size={20}/>
+                                <p className='--color-white'>Hi, Reza</p>
+                            </li>
+                        </ShowOnLogin>
+                        <ShowOnLogout>
+                            <li>
+                                <button className='--btn --btn-primary'>
+                                    <Link to='/login'>Login</Link>
+                                </button>
+                            </li>
+                        </ShowOnLogout>
+                        <ShowOnLogin>
+                            <li>
+                                <NavLink to='/profile'
+                                         className={({isActive}) => isActive ? 'active' : ''}>Profile</NavLink>
+                            </li>
+                            <li>
+                                <button className='--btn --btn-secondary' onClick={logoutUser}>Logout</button>
+                            </li>
+                        </ShowOnLogin>
                     </ul>
                 </nav>
             </header>
