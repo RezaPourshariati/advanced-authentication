@@ -10,7 +10,7 @@ const useRedirectLoggedOutUser = (path) => {
         let isLoggedIn;
         const redirectLoggedOut = async () => {
             try {
-                isLoggedIn = await authService.getLoginStatus()
+                isLoggedIn = await authService.getLoginStatus();
             } catch (error) {
                 console.log(error.message);
             }
