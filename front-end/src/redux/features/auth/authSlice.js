@@ -74,17 +74,11 @@ export const getUser = createAsyncThunk("auth/getUser", async (_, thunkAPI) => {
 });
 
 // --------------- Update User
-export const updateUser = createAsyncThunk(
-    "auth/updateUser",
-    async (userData, thunkAPI) => {
+export const updateUser = createAsyncThunk("auth/updateUser", async (userData, thunkAPI) => {
         try {
             return await authService.updateUser(userData);
         } catch (error) {
-            const message =
-                (error.response &&
-                    error.response.data &&
-                    error.response.data.message) ||
-                error.message ||
+            const message = (error.response && error.response.data && error.response.data.message) || error.message ||
                 error.toString();
             return thunkAPI.rejectWithValue(message);
         }
@@ -92,17 +86,11 @@ export const updateUser = createAsyncThunk(
 );
 
 // --------------- send Verification Email
-export const sendVerificationEmail = createAsyncThunk(
-    "auth/sendVerificationEmail",
-    async (_, thunkAPI) => {
+export const sendVerificationEmail = createAsyncThunk("auth/sendVerificationEmail", async (_, thunkAPI) => {
         try {
             return await authService.sendVerificationEmail();
         } catch (error) {
-            const message =
-                (error.response &&
-                    error.response.data &&
-                    error.response.data.message) ||
-                error.message ||
+            const message = (error.response && error.response.data && error.response.data.message) || error.message ||
                 error.toString();
             return thunkAPI.rejectWithValue(message);
         }
@@ -110,17 +98,11 @@ export const sendVerificationEmail = createAsyncThunk(
 );
 
 // --------------- verify User
-export const verifyUser = createAsyncThunk(
-    "auth/verifyUser",
-    async (verificationToken, thunkAPI) => {
+export const verifyUser = createAsyncThunk("auth/verifyUser", async (verificationToken, thunkAPI) => {
         try {
             return await authService.verifyUser(verificationToken);
         } catch (error) {
-            const message =
-                (error.response &&
-                    error.response.data &&
-                    error.response.data.message) ||
-                error.message ||
+            const message = (error.response && error.response.data && error.response.data.message) || error.message ||
                 error.toString();
             return thunkAPI.rejectWithValue(message);
         }
@@ -438,7 +420,7 @@ const authSlice = createSlice({
                 toast.error(action.payload);
             })
 
-            // send Verification Email
+            // ------------ send Verification Email
             .addCase(sendVerificationEmail.pending, (state) => {
                 state.isLoading = true;
             })
@@ -455,7 +437,7 @@ const authSlice = createSlice({
                 toast.error(action.payload);
             })
 
-            // verify User
+            // ------------ verify User
             .addCase(verifyUser.pending, (state) => {
                 state.isLoading = true;
             })
@@ -472,7 +454,7 @@ const authSlice = createSlice({
                 toast.error(action.payload);
             })
 
-            // change Password
+            // ------------ change Password
             .addCase(changePassword.pending, (state) => {
                 state.isLoading = true;
             })
@@ -489,7 +471,7 @@ const authSlice = createSlice({
                 toast.error(action.payload);
             })
 
-            // forgotPassword
+            // ------------ forgotPassword
             .addCase(forgotPassword.pending, (state) => {
                 state.isLoading = true;
             })
@@ -635,7 +617,6 @@ const authSlice = createSlice({
 export const {RESET} = authSlice.actions;
 export const selectIsLoggedIn = (state) => state.auth.isLoggedIn;
 export const selectUser = (state) => state.auth.user;
-
 
 
 export default authSlice.reducer;

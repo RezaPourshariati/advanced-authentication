@@ -28,15 +28,30 @@ const logout = async () => {
     return response.data.message;
 };
 
+// Get User Profile
 const getUser = async () => {
     const response = await axios.get(API_URL + "getUser");
     return response.data;
 };
 
+// Get User Status
 const getLoginStatus = async () => {
     const response = await axios.get(API_URL + "loginStatus");
     return response.data;
 };
+
+// Update User
+const updateUser = async (userData) => {
+    const response = await axios.patch(API_URL, "updateUser", userData);
+    return response.data;
+};
+
+// Delete User
+// const deleteUser = async () => {
+//     const response = await axios.get(API_URL, ":/");
+//     return response.data;
+// };
+
 
 
 const authService = {
@@ -44,7 +59,8 @@ const authService = {
     login,
     logout,
     getUser,
-    getLoginStatus
+    getLoginStatus,
+    updateUser
 };
 
 export default authService;
