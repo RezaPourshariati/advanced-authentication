@@ -3,14 +3,18 @@ import {BiLogIn} from "react-icons/bi";
 import {FaUserCircle} from "react-icons/fa";
 import {Link, NavLink} from "react-router-dom";
 import {useNavigate} from "react-router-dom";
-import {useDispatch} from "react-redux";
-import {logout, RESET} from "../../redux/features/auth/authSlice";
+import {useDispatch, useSelector} from "react-redux";
+import {getUser, logout, RESET} from "../../redux/features/auth/authSlice";
 import {ShowOnLogin, ShowOnLogout} from "../protect/hiddenLink";
+import {useEffect, useState} from "react";
 
 const Header = () => {
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
+
+    const {user} = useSelector((state) => state.auth);
+    // const [userName, setUserName] = useState(user?.name);
 
     const goHome = () => {
         navigate('/');
@@ -21,6 +25,10 @@ const Header = () => {
         await dispatch(logout());
         navigate("/login");
     };
+
+    useEffect(() => {
+        dispatch(getUser());
+    }, [dispatch]);
 
     return (
         <>
@@ -33,9 +41,9 @@ const Header = () => {
 
                     <ul className='home-links'>
                         <ShowOnLogin>
-                            <li className='--flex-center'>
+                            <li className='--flex-center' style={{display: "flex", gap: '1.2rem', marginRight: '2rem'}}>
                                 <FaUserCircle size={20}/>
-                                <p className='--color-white'>Hi, Reza</p>
+                                <p className='--color-white' style={{fontWeight: "bold"}}>{`Hi, ${user?.name}`}</p>
                             </li>
                         </ShowOnLogin>
                         <ShowOnLogout>
