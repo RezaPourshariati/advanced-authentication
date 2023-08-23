@@ -5,7 +5,7 @@ import './Profile.scss';
 import PageMenu from "../../components/pageMenu/PageMenu";
 import useRedirectLoggedOutUser from "../../customHook/useRedirectLoggedOutUser";
 import {useDispatch, useSelector} from "react-redux";
-import {getUser, updateUser} from "../../redux/features/auth/authSlice";
+import {getUser, selectUser, updateUser} from "../../redux/features/auth/authSlice";
 import Loader from "../../components/loader/Loader";
 import {toast} from "react-toastify";
 
@@ -92,9 +92,6 @@ const Profile = () => {
         });
     }, [user]);
 
-    // CLOUDINARY_URL=cloudinary://836824885433784:1BOlvkrAfaGFIb1dBexOA-uilhU@rezacloud
-    // https://console.cloudinary.com/settings/c-c93296c1c22c936c69e33ab4d3864f/upload
-
     const handleInputChange = (e) => {
         const name = e.target.name;
         const value = e.target.value;
@@ -110,46 +107,60 @@ const Profile = () => {
                     <h2>Profile Page</h2>
                     <div className="--flex-center profile">
                         <Card cardClass={"card"}>
-                            <>
-                                <div className="profile-photo">
-                                    <div>
-                                        <img src={imagePreview === null ? user?.photo : imagePreview}
-                                             alt="profile-image"/>
-                                        <h3>Role: {profile?.role}</h3>
+                            {!isLoading && user && (
+                                <>
+                                    <div className="profile-photo">
+                                        <div>
+                                            <img src={imagePreview === null ? user?.photo : imagePreview}
+                                                 alt="profile-image"/>
+                                            <h3>Role: {profile?.role}</h3>
+                                        </div>
                                     </div>
-                                </div>
-                                <form onSubmit={saveProfile}>
-                                    <p>
-                                        <label htmlFor="image">Change Photo: </label>
-                                        <input type="file" accept='image/*' name='image' onChange={handleImageChange}/>
-                                    </p>
-                                    <p>
-                                        <label htmlFor="name">Name: </label>
-                                        <input type="text" name='name' value={profile?.name}
-                                               onChange={handleInputChange}/>
-                                    </p>
-                                    <p>
-                                        <label htmlFor="email">Email: </label>
-                                        <input type="email" name='email' value={profile?.email}
-                                               onChange={handleInputChange} disabled/>
-                                    </p>
-                                    <p>
-                                        <label htmlFor="phone">Phone: </label>
-                                        <input type="text" name='phone' value={profile?.phone}
-                                               onChange={handleInputChange}/>
-                                    </p>
-                                    <p>
-                                        <label htmlFor="phone">Bio: </label>
-                                        <textarea name="bio" value={profile?.bio}
-                                                  onChange={handleInputChange} id="#" cols="30" rows="10"/>
-                                    </p>
-                                    <button className='--btn --btn-primary --btn-block'>Update Profile</button>
-                                </form>
-                            </>
+                                    <form onSubmit={saveProfile}>
+                                        <p>
+                                            <label htmlFor="image">Change Photo: </label>
+                                            <input type="file" accept='image/*' name='image'
+                                                   onChange={handleImageChange}/>
+                                        </p>
+                                        <p>
+                                            <label htmlFor="name">Name: </label>
+                                            <input type="text" name='name' value={profile?.name}
+                                                   onChange={handleInputChange}/>
+                                        </p>
+                                        <p>
+                                            <label htmlFor="email">Email: </label>
+                                            <input type="email" name='email' value={profile?.email}
+                                                   onChange={handleInputChange} disabled/>
+                                        </p>
+                                        <p>
+                                            <label htmlFor="phone">Phone: </label>
+                                            <input type="text" name='phone' value={profile?.phone}
+                                                   onChange={handleInputChange}/>
+                                        </p>
+                                        <p>
+                                            <label htmlFor="phone">Bio: </label>
+                                            <textarea name="bio" value={profile?.bio}
+                                                      onChange={handleInputChange} id="#" cols="30" rows="10"/>
+                                        </p>
+                                        <button className='--btn --btn-primary --btn-block'>Update Profile</button>
+                                    </form>
+                                </>
+                            )}
                         </Card>
                     </div>
                 </div>
             </section>
+        </>
+    );
+};
+
+export const UserName = () => {
+    const user = useSelector(selectUser);
+    const userName = user?.name || "...";
+    return (
+        <>
+            <p className='--color-white'
+               style={{borderRight: "2px solid greenYellow", paddingRight: "2rem"}}>Hi, {userName}</p>
         </>
     );
 };
