@@ -1,13 +1,17 @@
-import {useEffect, useState} from "react";
+import {useEffect, useLayoutEffect, useState} from "react";
 import Card from "../../components/card/Card";
 import profileImage from '../../assets/avatarr.png';
 import './Profile.scss';
 import PageMenu from "../../components/pageMenu/PageMenu";
 import useRedirectLoggedOutUser from "../../customHook/useRedirectLoggedOutUser";
 import {useDispatch, useSelector} from "react-redux";
-import {getUser} from "../../redux/features/auth/authSlice";
+import {getUser, updateUser} from "../../redux/features/auth/authSlice";
 import Loader from "../../components/loader/Loader";
+import {toast} from "react-toastify";
 
+
+const cloudName = process.env.REACT_APP_CLOUD_NAME;
+const uploadPreset = process.env.REACT_APP_UPLOAD_PRESET;
 
 const Profile = () => {
     useRedirectLoggedOutUser("/login"); // Our Custom Hook
@@ -26,17 +30,75 @@ const Profile = () => {
     };
 
     const [profile, setProfile] = useState(initialState);
+    const [profileImage, setProfileImage] = useState(null);
+    const [imagePreview, setImagePreview] = useState(null);
 
     useEffect(() => {
         dispatch(getUser());
     }, [dispatch]);
 
-    const handleImageChange = () => {
-
+    const handleImageChange = (e) => {
+        setProfileImage(e.target.files[0]);
+        setImagePreview(URL.createObjectURL(e.target.files[0]));
     };
 
-    const handleInputChange = () => {
+    const saveProfile = async (e) => {
+        e.preventDefault();
+        let imageURL;
+        try {
+            if (profileImage !== null && (profileImage.type === "image/jpeg" || profileImage.type === "image/jpg" ||
+                profileImage.type === "image/png")) {
+                const image = new FormData();
+                image.append("file", profileImage);
+                image.append("cloud_name", cloudName);
+                image.append("upload_preset", uploadPreset);
+                // for (let pair of image.entries()) {
+                //     console.log(pair[0]+ ', ' + pair[1]);
+                // }
 
+                // Save Image to Cloudinary.com
+                const response = await fetch("https://api.cloudinary.com/v1_1/rezacloud/image/upload", {
+                    method: "post",
+                    body: image
+                });
+                const imageData = await response.json();
+                // console.log(imageData);
+                imageURL = imageData.url.toString();
+            }
+            // Save Profile to MongoDB
+            const userData = {
+                name: profile.name,
+                phone: profile.phone,
+                bio: profile.bio,
+                photo: profileImage ? imageURL : profile.photo
+            }
+            dispatch(updateUser(userData));
+
+        } catch (error) {
+            toast.error(error.message);
+        }
+    };
+
+    useLayoutEffect(() => {
+        if (user) setProfile({
+            ...profile,
+            name: user.name,
+            email: user.email,
+            phone: user.phone,
+            photo: user.photo,
+            bio: user.bio,
+            role: user.role,
+            isVerified: user.isVerified
+        });
+    }, [user]);
+
+    // CLOUDINARY_URL=cloudinary://836824885433784:1BOlvkrAfaGFIb1dBexOA-uilhU@rezacloud
+    // https://console.cloudinary.com/settings/c-c93296c1c22c936c69e33ab4d3864f/upload
+
+    const handleInputChange = (e) => {
+        const name = e.target.name;
+        const value = e.target.value;
+        setProfile({...profile, [name]: value}); // Dynamic assign
     };
 
     return (
@@ -51,11 +113,12 @@ const Profile = () => {
                             <>
                                 <div className="profile-photo">
                                     <div>
-                                        <img src={profile?.photo} alt="profile-image"/>
+                                        <img src={imagePreview === null ? user?.photo : imagePreview}
+                                             alt="profile-image"/>
                                         <h3>Role: {profile?.role}</h3>
                                     </div>
                                 </div>
-                                <form>
+                                <form onSubmit={saveProfile}>
                                     <p>
                                         <label htmlFor="image">Change Photo: </label>
                                         <input type="file" accept='image/*' name='image' onChange={handleImageChange}/>
@@ -78,7 +141,7 @@ const Profile = () => {
                                     <p>
                                         <label htmlFor="phone">Bio: </label>
                                         <textarea name="bio" value={profile?.bio}
-                                                  onChange={handleInputChange} id="#" cols="30" rows="10"></textarea>
+                                                  onChange={handleInputChange} id="#" cols="30" rows="10"/>
                                     </p>
                                     <button className='--btn --btn-primary --btn-block'>Update Profile</button>
                                 </form>

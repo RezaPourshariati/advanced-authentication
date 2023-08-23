@@ -40,9 +40,9 @@ const getLoginStatus = async () => {
     return response.data;
 };
 
-// Update User
+// Update User Profile
 const updateUser = async (userData) => {
-    const response = await axios.patch(API_URL, "updateUser", userData);
+    const response = await axios.patch(API_URL + "updateUser", userData);
     return response.data;
 };
 

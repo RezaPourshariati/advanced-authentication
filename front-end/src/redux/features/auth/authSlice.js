@@ -65,9 +65,7 @@ export const getUser = createAsyncThunk("auth/getUser", async (_, thunkAPI) => {
     try {
         return await authService.getUser();
     } catch (error) {
-        const message =
-            (error.response && error.response.data && error.response.data.message) ||
-            error.message ||
+        const message = (error.response && error.response.data && error.response.data.message) || error.message ||
             error.toString();
         return thunkAPI.rejectWithValue(message);
     }
