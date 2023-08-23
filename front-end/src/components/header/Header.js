@@ -7,14 +7,12 @@ import {useDispatch, useSelector} from "react-redux";
 import {getUser, logout, RESET} from "../../redux/features/auth/authSlice";
 import {ShowOnLogin, ShowOnLogout} from "../protect/hiddenLink";
 import {useEffect, useState} from "react";
+import {UserName} from "../../pages/profile/Profile";
 
 const Header = () => {
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
-
-    const {user} = useSelector((state) => state.auth);
-    // const [userName, setUserName] = useState(user?.name);
 
     const goHome = () => {
         navigate('/');
@@ -26,9 +24,10 @@ const Header = () => {
         navigate("/login");
     };
 
-    useEffect(() => {
-        dispatch(getUser());
-    }, [dispatch]);
+    // const {user} = useSelector((state) => state.auth);
+    // useEffect(() => {
+    //     dispatch(getUser());
+    // }, [dispatch]);
 
     return (
         <>
@@ -43,7 +42,7 @@ const Header = () => {
                         <ShowOnLogin>
                             <li className='--flex-center' style={{display: "flex", gap: '1.2rem', marginRight: '2rem'}}>
                                 <FaUserCircle size={20}/>
-                                <p className='--color-white' style={{fontWeight: "bold"}}>{`Hi, ${user?.name}`}</p>
+                                <UserName/>
                             </li>
                         </ShowOnLogin>
                         <ShowOnLogout>
