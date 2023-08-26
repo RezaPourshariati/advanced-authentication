@@ -316,7 +316,7 @@ const sendVerificationEmail = asyncHandler(async (req, res) => {
 
     try {
         await sendEmail(subject, send_to, sent_from, reply_to, template, name, link);
-        res.status(200).json({massage: "Verification Email Sent"});
+        res.status(200).json({message: "Verification Email Sent"});
     } catch (error) {
         res.status(500);
         throw new Error("Email not sent, please try again");
