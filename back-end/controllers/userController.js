@@ -88,7 +88,7 @@ const loginUser = asyncHandler(async (req, res) => {
     const ua = parser(req.headers["user-agent"]);
     const thisUserAgent = ua.ua;
     console.log(thisUserAgent);
-    const allowedAgent = user.userAgent.includes((thisUserAgent));
+    const allowedAgent = user.userAgent.includes(thisUserAgent);
 
     if (!allowedAgent) {
         // Generate 6 digit code
