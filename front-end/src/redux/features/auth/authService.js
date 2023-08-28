@@ -46,12 +46,17 @@ const updateUser = async (userData) => {
     return response.data;
 };
 
-// Delete User
-// const deleteUser = async () => {
-//     const response = await axios.get(API_URL, ":/");
-//     return response.data;
-// };
+// Send Verification Email
+const sendVerificationEmail = async () => {
+    const response = await axios.post(API_URL + "sendVerificationEmail");
+    return response.data.message;
+};
 
+// Verify User
+const verifyUser = async (verificationToken) => {
+    const response = await axios.patch(`${API_URL}verifyUser/${verificationToken}`);
+    return response.data.message;
+}
 
 
 const authService = {
@@ -60,7 +65,9 @@ const authService = {
     logout,
     getUser,
     getLoginStatus,
-    updateUser
+    updateUser,
+    sendVerificationEmail,
+    verifyUser
 };
 
 export default authService;

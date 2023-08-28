@@ -83,7 +83,7 @@ export const updateUser = createAsyncThunk("auth/updateUser", async (userData, t
     }
 );
 
-// --------------- send Verification Email
+// --------------- Send Verification Email
 export const sendVerificationEmail = createAsyncThunk("auth/sendVerificationEmail", async (_, thunkAPI) => {
         try {
             return await authService.sendVerificationEmail();
@@ -95,7 +95,7 @@ export const sendVerificationEmail = createAsyncThunk("auth/sendVerificationEmai
     }
 );
 
-// --------------- verify User
+// --------------- Verify User
 export const verifyUser = createAsyncThunk("auth/verifyUser", async (verificationToken, thunkAPI) => {
         try {
             return await authService.verifyUser(verificationToken);
@@ -400,7 +400,7 @@ const authSlice = createSlice({
                 toast.error(action.payload);
             })
 
-            // ------------ Update user
+            // ------------ Update User
             .addCase(updateUser.pending, (state) => {
                 state.isLoading = true;
             })
@@ -418,7 +418,7 @@ const authSlice = createSlice({
                 toast.error(action.payload);
             })
 
-            // ------------ send Verification Email
+            // ------------ Send Verification Email
             .addCase(sendVerificationEmail.pending, (state) => {
                 state.isLoading = true;
             })
@@ -435,7 +435,7 @@ const authSlice = createSlice({
                 toast.error(action.payload);
             })
 
-            // ------------ verify User
+            // ------------ Verify User
             .addCase(verifyUser.pending, (state) => {
                 state.isLoading = true;
             })
@@ -452,7 +452,7 @@ const authSlice = createSlice({
                 toast.error(action.payload);
             })
 
-            // ------------ change Password
+            // ------------ Change Password
             .addCase(changePassword.pending, (state) => {
                 state.isLoading = true;
             })
@@ -469,7 +469,7 @@ const authSlice = createSlice({
                 toast.error(action.payload);
             })
 
-            // ------------ forgotPassword
+            // ------------ Forgot Password
             .addCase(forgotPassword.pending, (state) => {
                 state.isLoading = true;
             })
