@@ -1,6 +1,5 @@
 import {useEffect, useLayoutEffect, useState} from "react";
 import Card from "../../components/card/Card";
-import profileImage from '../../assets/avatarr.png';
 import './Profile.scss';
 import PageMenu from "../../components/pageMenu/PageMenu";
 import useRedirectLoggedOutUser from "../../customHook/useRedirectLoggedOutUser";
@@ -8,10 +7,17 @@ import {useDispatch, useSelector} from "react-redux";
 import {getUser, selectUser, updateUser} from "../../redux/features/auth/authSlice";
 import Loader from "../../components/loader/Loader";
 import {toast} from "react-toastify";
+import Notification from "../../components/notification/Notification";
 
 
 const cloudName = process.env.REACT_APP_CLOUD_NAME;
 const uploadPreset = process.env.REACT_APP_UPLOAD_PRESET;
+
+
+const shortenText = (text, n) => {
+    if (text.length > n) return text.substring(0, n).concat("...");
+    return text;
+};
 
 const Profile = () => {
     useRedirectLoggedOutUser("/login"); // Our Custom Hook
@@ -100,9 +106,10 @@ const Profile = () => {
 
     return (
         <>
+            {isLoading && <Loader/>}
+            {!profile.isVerified && <Notification/>}
             <section>
                 <div className="container">
-                    {isLoading && <Loader/>}
                     <PageMenu/>
                     <h2>Profile Page</h2>
                     <div className="--flex-center profile">
@@ -138,7 +145,7 @@ const Profile = () => {
                                                    onChange={handleInputChange}/>
                                         </p>
                                         <p>
-                                            <label htmlFor="phone">Bio: </label>
+                                            <label htmlFor="bio">Bio: </label>
                                             <textarea name="bio" value={profile?.bio}
                                                       onChange={handleInputChange} id="#" cols="30" rows="10"/>
                                         </p>
@@ -160,7 +167,7 @@ export const UserName = () => {
     return (
         <>
             <p className='--color-white'
-               style={{borderRight: "2px solid greenYellow", paddingRight: "2rem"}}>Hi, {userName}</p>
+               style={{borderRight: "2px solid greenYellow", paddingRight: "2rem"}}>Hi, {shortenText(userName, 14)}</p>
         </>
     );
 };
