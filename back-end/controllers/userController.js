@@ -309,7 +309,7 @@ const sendVerificationEmail = asyncHandler(async (req, res) => {
     const subject = "Verify Your Account - AUTH:REZA";
     const send_to = user.email;
     const sent_from = process.env.EMAIL_USER;
-    const reply_to = "rezanoreply@rezapshr.com";
+    const reply_to = "noreply@rezapshr.com";
     const template = "verifyEmail";
     const name = user.name;
     const link = verificationUrl;
