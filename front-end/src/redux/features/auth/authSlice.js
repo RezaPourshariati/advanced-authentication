@@ -108,17 +108,11 @@ export const verifyUser = createAsyncThunk("auth/verifyUser", async (verificatio
 );
 
 // --------------- change Password
-export const changePassword = createAsyncThunk(
-    "auth/changePassword",
-    async (userData, thunkAPI) => {
+export const changePassword = createAsyncThunk("auth/changePassword", async (userData, thunkAPI) => {
         try {
             return await authService.changePassword(userData);
         } catch (error) {
-            const message =
-                (error.response &&
-                    error.response.data &&
-                    error.response.data.message) ||
-                error.message ||
+            const message = (error.response && error.response.data && error.response.data.message) || error.message ||
                 error.toString();
             return thunkAPI.rejectWithValue(message);
         }
@@ -126,17 +120,11 @@ export const changePassword = createAsyncThunk(
 );
 
 // --------------- forgot Password
-export const forgotPassword = createAsyncThunk(
-    "auth/forgotPassword",
-    async (userData, thunkAPI) => {
+export const forgotPassword = createAsyncThunk("auth/forgotPassword", async (userData, thunkAPI) => {
         try {
             return await authService.forgotPassword(userData);
         } catch (error) {
-            const message =
-                (error.response &&
-                    error.response.data &&
-                    error.response.data.message) ||
-                error.message ||
+            const message = (error.response && error.response.data && error.response.data.message) || error.message ||
                 error.toString();
             return thunkAPI.rejectWithValue(message);
         }

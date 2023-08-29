@@ -10,7 +10,7 @@ const Verify = () => {
 
     const verifyAccount = async () => {
         await dispatch(verifyUser(verificationToken));
-        await dispatch((RESET()));
+        await dispatch(RESET());
     };
 
     return (
