@@ -359,7 +359,7 @@ const verifyUser = asyncHandler(async (req, res) => {
 const forgotPassword = asyncHandler(async (req, res) => {
     const {email} = req.body;
 
-    const user = await User.findOne(email);
+    const user = await User.findOne({email});
 
     if (!user) {
         res.status(404);
@@ -398,7 +398,7 @@ const forgotPassword = asyncHandler(async (req, res) => {
 
     try {
         await sendEmail(subject, send_to, sent_from, reply_to, template, name, link);
-        res.status(200).json({massage: "Password Reset Email Sent"});
+        res.status(200).json({message: "Password Reset Email Sent"});
     } catch (error) {
         res.status(500);
         throw new Error("Email not sent, please try again");
