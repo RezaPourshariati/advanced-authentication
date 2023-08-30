@@ -202,7 +202,7 @@ const deleteUser = asyncHandler(async (req, res) => {
     }
 
     await user.deleteOne(); // .remove() not work
-    res.status(200).json({massage: "User deleted successfully"});
+    res.status(200).json({message: "User deleted successfully"});
 });
 
 // ------------ Get All Users
