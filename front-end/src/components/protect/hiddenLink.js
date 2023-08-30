@@ -15,7 +15,7 @@ export const ShowOnLogout = ({children}) => {
 
 export const AdminAuth = ({children}) => {
     const isLoggedIn = useSelector(selectIsLoggedIn);
-    const userRole = useSelector(selectUser)
-    if (!isLoggedIn && (userRole === "admin") || (userRole === "author")) return <>{children}</>;
+    const user = useSelector(selectUser);
+    if (isLoggedIn && (user?.role === "admin" || user?.role === "author")) return <>{children}</>;
     return null;
 };
