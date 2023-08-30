@@ -70,6 +70,18 @@ const forgotPassword = async (userData) => {
     return response.data.message;
 };
 
+// Forgot Password
+const resetPassword = async (userData, resetToken) => {
+    const response = await axios.patch(`${API_URL}resetPassword/${resetToken}`, userData);
+    return response.data.message;
+};
+
+// Get Users
+const getUsers = async () => {
+    const response = await axios.get(API_URL + "getUsers");
+    return response.data;
+};
+
 
 const authService = {
     register,
@@ -81,7 +93,9 @@ const authService = {
     sendVerificationEmail,
     verifyUser,
     changePassword,
-    forgotPassword
+    forgotPassword,
+    resetPassword,
+    getUsers
 };
 
 export default authService;

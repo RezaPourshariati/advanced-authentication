@@ -107,7 +107,7 @@ export const verifyUser = createAsyncThunk("auth/verifyUser", async (verificatio
     }
 );
 
-// --------------- change Password
+// --------------- Change Password
 export const changePassword = createAsyncThunk("auth/changePassword", async (userData, thunkAPI) => {
         try {
             return await authService.changePassword(userData);
@@ -119,7 +119,7 @@ export const changePassword = createAsyncThunk("auth/changePassword", async (use
     }
 );
 
-// --------------- forgot Password
+// --------------- Forgot Password
 export const forgotPassword = createAsyncThunk("auth/forgotPassword", async (userData, thunkAPI) => {
         try {
             return await authService.forgotPassword(userData);
@@ -131,35 +131,23 @@ export const forgotPassword = createAsyncThunk("auth/forgotPassword", async (use
     }
 );
 
-// --------------- resetPassword
-export const resetPassword = createAsyncThunk(
-    "auth/resetPassword",
-    async ({userData, resetToken}, thunkAPI) => {
+// --------------- Reset Password
+export const resetPassword = createAsyncThunk("auth/resetPassword", async ({userData, resetToken}, thunkAPI) => {
         try {
             return await authService.resetPassword(userData, resetToken);
         } catch (error) {
-            const message =
-                (error.response &&
-                    error.response.data &&
-                    error.response.data.message) ||
-                error.message ||
+            const message = (error.response && error.response.data && error.response.data.message) || error.message ||
                 error.toString();
             return thunkAPI.rejectWithValue(message);
         }
     }
 );
-// --------------- getUsers
-export const getUsers = createAsyncThunk(
-    "auth/getUsers",
-    async (_, thunkAPI) => {
+// --------------- Get Users
+export const getUsers = createAsyncThunk("auth/getUsers", async (_, thunkAPI) => {
         try {
             return await authService.getUsers();
         } catch (error) {
-            const message =
-                (error.response &&
-                    error.response.data &&
-                    error.response.data.message) ||
-                error.message ||
+            const message = (error.response && error.response.data && error.response.data.message) || error.message ||
                 error.toString();
             return thunkAPI.rejectWithValue(message);
         }
@@ -272,9 +260,7 @@ const authSlice = createSlice({
             });
             let count = 0;
             array.forEach((item) => {
-                if (item === true) {
-                    count += 1;
-                }
+                if (item === true) count += 1;
             });
             state.verifiedUsers = count;
         },
@@ -286,9 +272,7 @@ const authSlice = createSlice({
             });
             let count = 0;
             array.forEach((item) => {
-                if (item === "suspended") {
-                    count += 1;
-                }
+                if (item === "suspended") count += 1;
             });
             state.suspendedUsers = count;
         },
@@ -474,7 +458,7 @@ const authSlice = createSlice({
                 toast.error(action.payload);
             })
 
-            // resetPassword
+            // ------------ Reset Password
             .addCase(resetPassword.pending, (state) => {
                 state.isLoading = true;
             })
@@ -491,7 +475,7 @@ const authSlice = createSlice({
                 toast.error(action.payload);
             })
 
-            // getUsers
+            // ------------ Get Users
             .addCase(getUsers.pending, (state) => {
                 state.isLoading = true;
             })
