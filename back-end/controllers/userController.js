@@ -238,7 +238,7 @@ const upgradeUser = asyncHandler(async (req, res) => {
     user.role = role;
     await user.save();
 
-    res.status(200).json({massage: `User role updated to ${role}`});
+    res.status(200).json({message: `User role updated to ${role}`});
 });
 
 // ------------ Send Automated Emails
@@ -263,7 +263,7 @@ const sendAutomatedEmail = asyncHandler(async (req, res) => {
 
     try {
         await sendEmail(subject, send_to, sent_from, reply_to, template, name, link);
-        res.status(200).json({massage: "Email Sent"});
+        res.status(200).json({message: "Email Sent"});
     } catch (error) {
         res.status(500);
         throw new Error("Email not sent, please try again");
