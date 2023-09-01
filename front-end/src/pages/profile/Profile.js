@@ -14,7 +14,7 @@ const cloudName = process.env.REACT_APP_CLOUD_NAME;
 const uploadPreset = process.env.REACT_APP_UPLOAD_PRESET;
 
 
-const shortenText = (text, n) => {
+export const shortenText = (text, n) => {
     if (text.length > n) return text.substring(0, n).concat("...");
     return text;
 };

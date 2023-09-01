@@ -1,4 +1,5 @@
 import {NavLink} from "react-router-dom";
+import {AdminAuth} from "../protect/hiddenLink";
 
 const PageMenu = () => {
     return (
@@ -12,14 +13,16 @@ const PageMenu = () => {
                         <li className='--mx2'>
                             <NavLink to='/changePassword'>Change Password</NavLink>
                         </li>
-                        <li className='--mx2'>
-                            <NavLink to='/users'>Users</NavLink>
-                        </li>
+                        <AdminAuth>
+                            <li className='--mx2'>
+                                <NavLink to='/users'>Users</NavLink>
+                            </li>
+                        </AdminAuth>
                     </ul>
                 </nav>
             </div>
         </>
-    );
+);
 };
 
 export default PageMenu;
