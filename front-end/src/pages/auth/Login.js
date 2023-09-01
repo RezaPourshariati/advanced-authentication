@@ -7,7 +7,7 @@ import PasswordInput from "../../components/passwordInput/PasswordInput";
 import {useDispatch, useSelector} from "react-redux";
 import {toast} from "react-toastify";
 import {validateEmail} from "../../redux/features/auth/authService";
-import {login, register, RESET} from "../../redux/features/auth/authSlice";
+import {login, register, RESET, sendLoginCode} from "../../redux/features/auth/authSlice";
 import Loader from "../../components/loader/Loader";
 
 
@@ -29,7 +29,7 @@ const Login = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const {isLoading, isLoggedIn, isSuccess, message} = useSelector((state) => state.auth);
+    const {isLoading, isLoggedIn, isSuccess, twoFactor, isError, message} = useSelector((state) => state.auth);
 
     const loginUser = async (e) => {
         e.preventDefault();
@@ -45,7 +45,11 @@ const Login = () => {
     useEffect(() => {
         if (isSuccess && isLoggedIn) navigate("/profile");
         dispatch(RESET());
-    }, [isLoggedIn, isSuccess, dispatch, navigate]);
+        if (isError && twoFactor) {
+            dispatch(sendLoginCode(email));
+            navigate(`/loginWithCode/${email}`);
+        }
+    }, [isLoggedIn, isSuccess, dispatch, navigate, isError, twoFactor, email]);
 
     return (
         <>
