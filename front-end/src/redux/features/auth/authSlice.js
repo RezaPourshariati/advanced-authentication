@@ -10,7 +10,9 @@ const initialState = {
     isError: false,
     isSuccess: false,
     isLoading: false,
-    message: ""
+    message: "",
+    verifiedUsers: 0,
+    suspendedUsers: 0
 };
 
 // --------------- Register User
@@ -153,35 +155,23 @@ export const getUsers = createAsyncThunk("auth/getUsers", async (_, thunkAPI) =>
         }
     }
 );
-// --------------- deleteUser
-export const deleteUser = createAsyncThunk(
-    "auth/deleteUser",
-    async (id, thunkAPI) => {
+// --------------- Delete User
+export const deleteUser = createAsyncThunk("auth/deleteUser", async (id, thunkAPI) => {
         try {
             return await authService.deleteUser(id);
         } catch (error) {
-            const message =
-                (error.response &&
-                    error.response.data &&
-                    error.response.data.message) ||
-                error.message ||
+            const message = (error.response && error.response.data && error.response.data.message) || error.message ||
                 error.toString();
             return thunkAPI.rejectWithValue(message);
         }
     }
 );
-// --------------- upgradeUser
-export const upgradeUser = createAsyncThunk(
-    "auth/upgradeUser",
-    async (userData, thunkAPI) => {
+// --------------- Upgrade User
+export const upgradeUser = createAsyncThunk("auth/upgradeUser", async (userData, thunkAPI) => {
         try {
             return await authService.upgradeUser(userData);
         } catch (error) {
-            const message =
-                (error.response &&
-                    error.response.data &&
-                    error.response.data.message) ||
-                error.message ||
+            const message = (error.response && error.response.data && error.response.data.message) || error.message ||
                 error.toString();
             return thunkAPI.rejectWithValue(message);
         }
@@ -491,7 +481,7 @@ const authSlice = createSlice({
                 toast.error(action.payload);
             })
 
-            // deleteUser
+            // ------------ Delete User
             .addCase(deleteUser.pending, (state) => {
                 state.isLoading = true;
             })
@@ -508,7 +498,7 @@ const authSlice = createSlice({
                 toast.error(action.payload);
             })
 
-            // upgradeUser
+            // ------------ Upgrade User
             .addCase(upgradeUser.pending, (state) => {
                 state.isLoading = true;
             })
@@ -525,7 +515,7 @@ const authSlice = createSlice({
                 toast.error(action.payload);
             })
 
-            // send Login Code
+            // ------------ Send Login Code
             .addCase(sendLoginCode.pending, (state) => {
                 state.isLoading = true;
             })
@@ -584,7 +574,7 @@ const authSlice = createSlice({
     }
 });
 
-export const {RESET} = authSlice.actions;
+export const {RESET, CALC_VERIFIED_USER, CALC_SUSPENDED_USER} = authSlice.actions;
 export const selectIsLoggedIn = (state) => state.auth.isLoggedIn;
 export const selectUser = (state) => state.auth.user;
 
