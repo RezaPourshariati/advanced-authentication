@@ -178,36 +178,24 @@ export const upgradeUser = createAsyncThunk("auth/upgradeUser", async (userData,
     }
 );
 
-// --------------- sendLoginCode
-export const sendLoginCode = createAsyncThunk(
-    "auth/sendLoginCode",
-    async (email, thunkAPI) => {
+// --------------- Send Login Code
+export const sendLoginCode = createAsyncThunk("auth/sendLoginCode", async (email, thunkAPI) => {
         try {
             return await authService.sendLoginCode(email);
         } catch (error) {
-            const message =
-                (error.response &&
-                    error.response.data &&
-                    error.response.data.message) ||
-                error.message ||
+            const message = (error.response && error.response.data && error.response.data.message) || error.message ||
                 error.toString();
             return thunkAPI.rejectWithValue(message);
         }
     }
 );
 
-// --------------- loginWithCode
-export const loginWithCode = createAsyncThunk(
-    "auth/loginWithCode",
-    async ({code, email}, thunkAPI) => {
+// --------------- Login With Code
+export const loginWithCode = createAsyncThunk("auth/loginWithCode", async ({code, email}, thunkAPI) => {
         try {
             return await authService.loginWithCode(code, email);
         } catch (error) {
-            const message =
-                (error.response &&
-                    error.response.data &&
-                    error.response.data.message) ||
-                error.message ||
+            const message = (error.response && error.response.data && error.response.data.message) || error.message ||
                 error.toString();
             return thunkAPI.rejectWithValue(message);
         }
@@ -305,9 +293,7 @@ const authSlice = createSlice({
                 state.message = action.payload;
                 state.user = null;
                 toast.error(action.payload);
-                if (action.payload.includes("New browser")) {
-                    state.twoFactor = true;
-                }
+                if (action.payload.includes("New browser")) state.twoFactor = true;
             })
 
             // ------------ Logout User
@@ -532,7 +518,7 @@ const authSlice = createSlice({
                 toast.error(action.payload);
             })
 
-            // loginWithCode
+            // ------------ Login With Code
             .addCase(loginWithCode.pending, (state) => {
                 state.isLoading = true;
             })
