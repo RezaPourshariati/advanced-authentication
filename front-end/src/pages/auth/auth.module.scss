@@ -54,6 +54,12 @@
       p {
         text-align: center;
         margin: 1rem;
+        transition: all 0.2s linear;
+        color: #007bff;
+      }
+      p:hover {
+        color: orangered;
+        cursor: pointer;
       }
     }
 
