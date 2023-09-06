@@ -23,8 +23,9 @@ const LoginWithCode = () => {
 
     const loginUserWithCode = async (e) => {
         e.preventDefault();
-        if (!loginCode) toast.error("Please fill in the login code");
-        if (loginCode.length !== 6) toast.error("Access code must be at least 6 characters");
+        if (!loginCode) toast.warn("Please fill in the login code");
+        if (!Number(loginCode)) toast.warn("Access Code must include only numbers!");
+        if (loginCode.length !== 6) toast.warn("Access code must be at least 6 characters");
         const code = {
             loginCode
         };
