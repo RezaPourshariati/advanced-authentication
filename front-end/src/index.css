@@ -314,20 +314,22 @@ p {
 
 .--btn {
     font-size: 1.6rem;
-    font-weight: 400;
+    font-weight: 500;
+    color: white;
     padding: 6px 8px;
     margin: 0 5px 0 0;
     border: 1px solid transparent;
-    border-radius: 3px;
+    border-radius: 6px;
     cursor: pointer;
     display: flex;
     justify-content: center;
     align-items: center;
     transition: all 0.3s;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
 }
 
 .--btn:hover {
-    background: #03a5fc;
+    background: #504acc;
     /*transform: translateY(-2px);*/
 }
 

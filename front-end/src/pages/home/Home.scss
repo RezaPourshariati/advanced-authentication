@@ -32,6 +32,10 @@
   width: 80%;
 }
 
+.register, .login {
+  background: #645cff;
+}
+
 @media screen and (max-width: 600px) {
   .hero {
     flex-direction: column;
