@@ -11,10 +11,10 @@ const Home = () => {
                     <p>Learn and Master Authentication and Authorization using MERN Stack.</p>
                     <p>Password Reset, Social Login, User Permissions, Email Notifications etc.</p>
                     <div className='hero-buttons --flex-start'>
-                        <button className="--btn --btn-danger">
+                        <button className="--btn register" style={{fontWeight: "bold"}}>
                             <Link to="/register">Register</Link>
                         </button>
-                        <button className="--btn --btn-primary">
+                        <button className="--btn login" style={{fontWeight: "bold"}}>
                             <Link to="/login">Login</Link>
                         </button>
                     </div>
