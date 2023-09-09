@@ -18,7 +18,8 @@ const initialState = {
 };
 
 const ChangePassword = () => {
-    useRedirectLoggedOutUser("login");
+    useRedirectLoggedOutUser("/login");
+
     const [formData, setFormData] = useState(initialState);
     const {oldPassword, password, password2} = formData;
 
@@ -75,7 +76,7 @@ const ChangePassword = () => {
                                 <PasswordInput placeholder='Confirm Password' name='password2' value={password2}
                                                onChange={handleInputChange}/>
                                 {isLoading ? <Spinner/> : (
-                                    <button type="submit" className='--btn --btn-danger --btn-block'>Change
+                                    <button type="submit" className='--btn register --btn-block'>Change
                                         Password</button>
                                 )}
                             </form>
