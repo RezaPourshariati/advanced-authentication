@@ -1,6 +1,6 @@
 const asyncHandler = require("express-async-handler");
 const User = require('../models/userModel');
-const {generateToken, hashToken} = require("../utils");
+const {generateToken, hashToken, generateRefreshToken} = require("../utils");
 const bcrypt = require('bcryptjs');
 const parser = require('ua-parser-js');
 const jwt = require('jsonwebtoken');
@@ -8,8 +8,10 @@ const sendEmail = require("../utils/sendEmail");
 const Token = require("../models/tokenModel");
 const crypto = require('crypto');
 const Cryptr = require('cryptr');
+const {OAuth2Client} = require("google-auth-library");
 
 const cryptr = new Cryptr(process.env.CRYPTR_KEY);
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 // ------------ Register User
 const registerUser = asyncHandler(async (req, res) => {
@@ -43,7 +45,7 @@ const registerUser = asyncHandler(async (req, res) => {
     const token = generateToken(user._id);
 
     // Send HTTP-only Cookie
-    res.cookie("token", token, {
+    res.cookie("accessToken", token, {
         path: '/',
         httpOnly: true,
         expires: new Date(Date.now() + 1000 * 86400), // 1 day
@@ -115,21 +117,42 @@ const loginUser = asyncHandler(async (req, res) => {
         throw new Error("New browser or device detected.");
     }
 
+    const newRefreshToken = crypto.randomBytes(32).toString("hex") + user._id;
 
     // Generate Token
-    const token = generateToken(user._id);
+    const accessToken = generateToken(user._id);
+    const refreshToken = generateRefreshToken({refreshToken: newRefreshToken, userId: user._id});
 
     if (user && passwordIsCorrect) {
         // Send HTTP-only Cookie
-        res.cookie("token", token, {
+        res.cookie("accessToken", accessToken, { // we can add signed: true for adding cookies to signedCookies in req.
+            path: '/',
+            httpOnly: true,
+            sameSite: 'none',
+            secure: true,
+            maxAge: 1000 * 60
+        });
+        res.cookie("refreshToken", refreshToken, {
             path: '/',
             httpOnly: true,
             expires: new Date(Date.now() + 1000 * 86400), // 1 day
             sameSite: 'none',
             secure: true
         });
+
+        let userToken = await Token.findOne({userId: user._id});
+        if (userToken) await userToken.deleteOne();
+
+        // Save Refresh Token to DB
+        await new Token({
+            userId: user._id,
+            refreshToken: newRefreshToken,
+            createdAt: Date.now(),
+            expiresAt: Date.now() + 1000 * 86400 // 1-Day
+        }).save();
+
         const {_id, name, email, phone, bio, photo, role, isVerified} = user;
-        res.status(200).json({_id, name, email, phone, bio, photo, role, isVerified, token});
+        res.status(200).json({_id, name, email, phone, bio, photo, role, isVerified, accessToken});
     } else {
         res.status(500);
         throw new Error("Something went wrong, please try again!");
@@ -138,7 +161,14 @@ const loginUser = asyncHandler(async (req, res) => {
 
 // ------------ Logout User
 const logoutUser = asyncHandler(async (req, res) => {
-    res.cookie("token", '', {
+    res.cookie("accessToken", '', {
+        path: '/',
+        httpOnly: true,
+        expires: new Date(0),
+        sameSite: 'none',
+        secure: true
+    });
+    res.cookie("refreshToken", '', {
         path: '/',
         httpOnly: true,
         expires: new Date(0),
@@ -218,11 +248,11 @@ const getUsers = asyncHandler(async (req, res) => {
 
 // ------------ Get Login Status --> function with boolean result
 const loginStatus = asyncHandler(async (req, res) => {
-    const token = req.cookies.token;
-    if (!token) return res.json(false);
+    const accessToken = req.cookies.accessToken;
+    if (!accessToken) return res.json(false);
 
     // Verify token
-    const verified = jwt.verify(token, process.env.JWT_SECRET);
+    const verified = await jwt.verify(accessToken, process.env.JWT_SECRET);
     if (verified) return res.json(true);
 });
 
@@ -498,7 +528,7 @@ const sendLoginCode = asyncHandler(async (req, res) => {
 
     try {
         await sendEmail(subject, send_to, sent_from, reply_to, template, name, link);
-        res.status(200).json({massage: `Access code sent to ${email}`});
+        res.status(200).json({message: `Access code sent to ${email}`});
     } catch (error) {
         res.status(500);
         throw new Error("Email not sent, please try again");
@@ -558,6 +588,97 @@ const loginWithCode = asyncHandler(async (req, res) => {
     }
 });
 
+// ------------ Login With Google
+const loginWithGoogle = asyncHandler(async (req, res) => {
+    const {userToken} = req.body;
+    console.log(userToken);
+
+    const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+    const ticket = await client.verifyIdToken({
+        idToken: userToken,
+        audience: process.env.GOOGLE_CLIENT_ID,
+    });
+
+    const payload = ticket.getPayload();
+    const {name, email, picture, sub} = payload;
+    const password = Date.now() + sub;
+
+    // Get UserAgent
+    const ua = parser(req.headers["user-agent"]);
+    const userAgent = [ua.ua];
+
+    // Check if user exists
+    const user = await User.findOne({email});
+
+    if (!user) {
+        // Create new user
+        const newUser = await User.create({
+            name,
+            email,
+            password,
+            photo: picture,
+            isVerified: true,
+            userAgent,
+        });
+
+        if (newUser) {
+            // Generate Token
+            const accessToken = generateToken(newUser._id);
+
+            // Send HTTP-only cookie
+            res.cookie("accessToken", accessToken, {
+                path: "/",
+                httpOnly: true,
+                expires: new Date(Date.now() + 1000 * 86400), // 1 day
+                sameSite: "none",
+                secure: true,
+            });
+
+            const {_id, name, email, phone, bio, photo, role, isVerified} = newUser;
+
+            res.status(201).json({
+                _id,
+                name,
+                email,
+                phone,
+                bio,
+                photo,
+                role,
+                isVerified,
+                token,
+            });
+        }
+    }
+
+    // User exists, login
+    if (user) {
+        const accessToken = generateToken(user._id);
+
+        // Send HTTP-only cookie
+        res.cookie("accessToken", accessToken, {
+            path: "/",
+            httpOnly: true,
+            expires: new Date(Date.now() + 1000 * 86400), // 1 day
+            sameSite: "none",
+            secure: true,
+        });
+
+        const {_id, name, email, phone, bio, photo, role, isVerified} = user;
+
+        res.status(201).json({
+            _id,
+            name,
+            email,
+            phone,
+            bio,
+            photo,
+            role,
+            isVerified,
+            token,
+        });
+    }
+});
+
 
 module.exports = {
     registerUser,
@@ -576,5 +697,6 @@ module.exports = {
     resetPassword,
     changePassword,
     sendLoginCode,
-    loginWithCode
+    loginWithCode,
+    loginWithGoogle
 };

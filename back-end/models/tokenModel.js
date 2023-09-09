@@ -15,7 +15,11 @@ const tokenSchema = mongoose.Schema({
         type: String,
         default: ""
     },
-    loginToken: {
+    refreshToken: {
+        type: String,
+        default: ""
+    },
+    loginToken: { // trigger 2FA
         type: String,
         default: ""
     },
