@@ -7,8 +7,9 @@ import PasswordInput from "../../components/passwordInput/PasswordInput";
 import {useDispatch, useSelector} from "react-redux";
 import {toast} from "react-toastify";
 import {validateEmail} from "../../redux/features/auth/authService";
-import {login, register, RESET, sendLoginCode} from "../../redux/features/auth/authSlice";
+import {login, loginWithGoogle, RESET, sendLoginCode} from "../../redux/features/auth/authSlice";
 import Loader from "../../components/loader/Loader";
+import {GoogleLogin} from "@react-oauth/google";
 
 
 const initialState = {
@@ -51,6 +52,11 @@ const Login = () => {
         }
     }, [isLoggedIn, isSuccess, dispatch, navigate, isError, twoFactor, email]);
 
+    const googleLogin = async (credentialResponse) => {
+        console.log(credentialResponse.credential);
+        await dispatch(loginWithGoogle(credentialResponse.credential));
+    };
+
     return (
         <>
             <div className={`container ${styles.auth}`}>
@@ -62,7 +68,18 @@ const Login = () => {
                         </div>
                         <h2 style={{marginBottom: '2rem'}}>Login</h2>
                         <div className='--flex-center'>
-                            <button className="--btn --btn-google">Login with Google</button>
+                            <GoogleLogin onSuccess={googleLogin}
+                                         onError={() => {
+                                             console.log("Login Failed");
+                                             toast.error("Login Failed");
+                                         }}
+                                         cookiePolicy={"single_host_origin"}
+                                         useOneTap={true}
+                                         // login_uri={"http://localhost:3000"}
+                                         // native_login_uri={"http://localhost:3000"}
+                                         // state_cookie_domain={"http://localhost:3000"}
+                                         // allowed_parent_origin={"http://localhost:3000"}
+                            />
                         </div>
                         <br/>
                         <p className='--text-center --fw-bold'>or</p>
