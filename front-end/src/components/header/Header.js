@@ -6,11 +6,9 @@ import {useNavigate} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {getUser, logout, RESET} from "../../redux/features/auth/authSlice";
 import {ShowOnLogin, ShowOnLogout} from "../protect/hiddenLink";
-import {useEffect, useState} from "react";
 import {UserName} from "../../pages/profile/Profile";
 
 const Header = () => {
-
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
@@ -34,8 +32,8 @@ const Header = () => {
             <header className='header'>
                 <nav>
                     <div className="logo" onClick={goHome}>
-                        <BiLogIn size={35}/>
-                        <span>AUTH:Reza</span>
+                        <BiLogIn size={40}/>
+                        <span style={{fontWeight: "bold"}}>R.Secure:One</span>
                     </div>
 
                     <ul className='home-links'>
@@ -47,7 +45,7 @@ const Header = () => {
                         </ShowOnLogin>
                         <ShowOnLogout>
                             <li>
-                                <button className='--btn --btn-primary'>
+                                <button className='--btn --btn-secondary'>
                                     <Link to='/login'>Login</Link>
                                 </button>
                             </li>
