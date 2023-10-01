@@ -65,8 +65,39 @@ const protect = asyncHandler(async (req, res, next) => {
                 secure: true,
                 // maxAge: 1000 * 60
             });
+            // res.cookie("refreshToken", refreshToken, {
+            //     path: '/',
+            //     httpOnly: true,
+            //     expires: new Date(Date.now() + 1000 * 86400), // 1 day
+            //     sameSite: 'none',
+            //     secure: true
+            // });
 
-            req.user = await User.findById(verified.userId).select("-password");
+            const user = await User.findById(verified.userId).select("-password");
+
+            // let userRefreshToken = await Token.findOne({userId: verified.userId});
+            // if (userRefreshToken) await userRefreshToken.deleteOne();
+
+
+            // Save Refresh Token to DB
+            // await new Token({
+            //     userId: verified.userId,
+            //     refreshToken: refreshToken,
+            //     createdAt: Date.now(),
+            //     expiresAt: Date.now() + 1000 * 86400 // 1-Day
+            // }).save();
+
+            // if (!user) {
+            //     res.status(404);
+            //     throw new Error("User not found!");
+            // }
+            //
+            // if (user.role === 'suspended') {
+            //     res.status(400);
+            //     throw new Error("User suspended, please contact support");
+            // }
+
+            req.user = user;
             next();
         }
 
