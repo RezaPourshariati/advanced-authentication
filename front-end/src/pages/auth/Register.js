@@ -115,7 +115,7 @@ const Register = () => {
                                            onChange={handleInputChange} onPaste={(e) => {
                                 e.preventDefault();
                                 toast.error("Cannot paste into input field");
-                                return false
+                                return false;
                             }}/>
                             {/* Password Strength */}
                             <Card cardClass={styles.group}>
