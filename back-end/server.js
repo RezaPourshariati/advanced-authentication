@@ -15,7 +15,7 @@ app.use(express.urlencoded({extended: false}));
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(cors({
-    origin: ["http://localhost:3000", "https://rsecureOne.vercel.app"],
+    origin: ["http://localhost:3000", "https://reza-secureone.vercel.app"],
     credentials: true
 })); // cors help us prevent any conflict when we make a request from front-end to the back-end.
 
