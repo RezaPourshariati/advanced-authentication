@@ -60,7 +60,7 @@ const protect = asyncHandler(async (req, res, next) => {
             res.cookie("accessToken", newAccessToken, { // we can add signed: true for adding cookies to signedCookies in req.
                 path: '/',
                 httpOnly: true,
-                expires: new Date(Date.now() + 1000 * 60 * 2), // 2 Minutes
+                expires: new Date(Date.now() + 1000 * 60 * 60 * 4), // 4 Hours
                 sameSite: 'none',
                 secure: true,
                 // maxAge: 1000 * 60
