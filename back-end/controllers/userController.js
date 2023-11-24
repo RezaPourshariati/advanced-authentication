@@ -11,7 +11,7 @@ const Cryptr = require('cryptr');
 const {OAuth2Client} = require("google-auth-library");
 
 const cryptr = new Cryptr(process.env.CRYPTR_KEY);
-const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+// const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 // ------------ Register User
 const registerUser = asyncHandler(async (req, res) => {
@@ -130,12 +130,12 @@ const loginUser = asyncHandler(async (req, res) => {
             httpOnly: true,
             sameSite: 'none',
             secure: true,
-            maxAge: 1000 * 60
+            maxAge: 1000 * 60 * 60 * 4 // 4 hour
         });
         res.cookie("refreshToken", refreshToken, {
             path: '/',
             httpOnly: true,
-            expires: new Date(Date.now() + 1000 * 86400), // 1 day
+            expires: new Date(Date.now() + 1000 * 86400 * 2), // 2 Days
             sameSite: 'none',
             secure: true
         });
@@ -148,7 +148,7 @@ const loginUser = asyncHandler(async (req, res) => {
             userId: user._id,
             refreshToken: newRefreshToken,
             createdAt: Date.now(),
-            expiresAt: Date.now() + 1000 * 86400 // 1-Day
+            expiresAt: Date.now() + 1000 * 86400 * 2 // 2 Days
         }).save();
 
         const {_id, name, email, phone, bio, photo, role, isVerified} = user;
