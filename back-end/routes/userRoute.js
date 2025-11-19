@@ -1,6 +1,6 @@
-const express = require("express");
-const {protect, adminOnly, authorOnly} = require('../middleware/authMiddleware');
-const {
+import express from "express";
+import {protect, adminOnly, authorOnly} from '../middleware/authMiddleware.js';
+import {
     registerUser,
     loginUser,
     logoutUser,
@@ -19,7 +19,7 @@ const {
     sendLoginCode,
     loginWithCode,
     loginWithGoogle
-} = require("../controllers/userController");
+} from "../controllers/userController.js";
 
 const router = express.Router();
 
@@ -45,4 +45,4 @@ router.post('/loginWithCode/:email', loginWithCode);
 
 router.post("/google/callback", loginWithGoogle);
 
-module.exports = router;
+export default router;

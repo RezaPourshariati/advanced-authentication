@@ -3,6 +3,16 @@ node_modules/
 .pnp
 .pnp.js
 
+# Testing
+coverage/
+*.lcov
+.nyc_output
+
+# Production builds
+dist/
+build/
+*.local
+
 # Environment variables
 .env
 .env.local
@@ -41,15 +51,12 @@ Thumbs.db
 .vscode/
 *.sublime-project
 *.sublime-workspace
+*.code-workspace
 
 # Temporary files
 *.tmp
 *.temp
 .cache/
-
-# Build outputs
-dist/
-build/
 
 # Misc
 *.pem

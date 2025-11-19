@@ -1,14 +1,14 @@
-const asyncHandler = require("express-async-handler");
-const User = require('../models/userModel');
-const {generateToken, hashToken, generateRefreshToken} = require("../utils");
-const bcrypt = require('bcryptjs');
-const parser = require('ua-parser-js');
-const jwt = require('jsonwebtoken');
-const sendEmail = require("../utils/sendEmail");
-const Token = require("../models/tokenModel");
-const crypto = require('crypto');
-const Cryptr = require('cryptr');
-const {OAuth2Client} = require("google-auth-library");
+import asyncHandler from "express-async-handler";
+import User from '../models/userModel.js';
+import {generateToken, hashToken, generateRefreshToken} from "../utils/index.js";
+import bcrypt from 'bcryptjs';
+import {UAParser} from 'ua-parser-js';
+import jwt from 'jsonwebtoken';
+import sendEmail from "../utils/sendEmail.js";
+import Token from "../models/tokenModel.js";
+import crypto from 'crypto';
+import Cryptr from 'cryptr';
+import {OAuth2Client} from "google-auth-library";
 
 const cryptr = new Cryptr(process.env.CRYPTR_KEY);
 // const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
@@ -35,7 +35,7 @@ const registerUser = asyncHandler(async (req, res) => {
     }
 
     // Get UserAgent
-    const ua = parser(req.headers['user-agent']);
+    const ua = new UAParser(req.headers['user-agent']).getResult();
     const userAgent = [ua.ua];
 
     // Create new user
@@ -87,7 +87,7 @@ const loginUser = asyncHandler(async (req, res) => {
     }
 
     // ---> Trigger 2-Factor unknown UserAgent [69]
-    const ua = parser(req.headers["user-agent"]);
+    const ua = new UAParser(req.headers["user-agent"]).getResult();
     const thisUserAgent = ua.ua;
     console.log(thisUserAgent);
     const allowedAgent = user.userAgent.includes(thisUserAgent);
@@ -566,7 +566,7 @@ const loginWithCode = asyncHandler(async (req, res) => {
         throw new Error("Incorrect login code, please try again");
     } else {
         // Register User-Agent
-        const ua = parser(req.headers["user-agent"]);
+        const ua = new UAParser(req.headers["user-agent"]).getResult();
         const thisUserAgent = ua.ua;
         user.userAgent.push(thisUserAgent);
         await user.save();
@@ -604,7 +604,7 @@ const loginWithGoogle = asyncHandler(async (req, res) => {
     const password = Date.now() + sub;
 
     // Get UserAgent
-    const ua = parser(req.headers["user-agent"]);
+    const ua = new UAParser(req.headers["user-agent"]).getResult();
     const userAgent = [ua.ua];
 
     // Check if user exists
@@ -680,7 +680,7 @@ const loginWithGoogle = asyncHandler(async (req, res) => {
 });
 
 
-module.exports = {
+export {
     registerUser,
     loginUser,
     logoutUser,

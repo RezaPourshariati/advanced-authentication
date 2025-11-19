@@ -1,8 +1,8 @@
-const asyncHandler = require('express-async-handler');
-const User = require('../models/userModel');
-const jwt = require('jsonwebtoken');
-const Token = require("../models/tokenModel");
-const {generateToken} = require("../utils");
+import asyncHandler from 'express-async-handler';
+import User from '../models/userModel.js';
+import jwt from 'jsonwebtoken';
+import Token from "../models/tokenModel.js";
+import {generateToken} from "../utils/index.js";
 
 
 const protect = asyncHandler(async (req, res, next) => {
@@ -135,7 +135,7 @@ const verifiedOnly = asyncHandler(async (req, res, next) => {
     }
 });
 
-module.exports = {protect, adminOnly, authorOnly, verifiedOnly};
+export {protect, adminOnly, authorOnly, verifiedOnly};
 
 
 // In JWT, "iat" stands for "issued at" and identifies the time at which the JWT was issued.

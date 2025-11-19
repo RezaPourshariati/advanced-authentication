@@ -1,0 +1,35 @@
+{
+  "name": "advanced-authentication",
+  "version": "1.0.0",
+  "description": "Advanced Authentication System with React and Node.js",
+  "private": true,
+  "workspaces": [
+    "front-end",
+    "back-end"
+  ],
+  "scripts": {
+    "install:all": "pnpm install",
+    "dev": "concurrently -n \"backend,frontend\" -c \"blue,green\" \"pnpm --filter back-end run back-end\" \"pnpm --filter front-end run dev\"",
+    "dev:frontend": "pnpm --filter front-end run dev",
+    "dev:backend": "pnpm --filter back-end run back-end",
+    "start": "concurrently -n \"backend,frontend\" -c \"blue,green\" \"pnpm --filter back-end run start\" \"pnpm --filter front-end run dev\"",
+    "build": "pnpm --filter front-end run build",
+    "build:frontend": "pnpm --filter front-end run build",
+    "preview": "pnpm --filter front-end run preview",
+    "test": "pnpm --filter front-end run test",
+    "clean": "pnpm --filter front-end exec rm -rf dist && pnpm --filter back-end exec rm -rf dist"
+  },
+  "keywords": [
+    "authentication",
+    "react",
+    "nodejs",
+    "mongodb",
+    "jwt"
+  ],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
+}
+

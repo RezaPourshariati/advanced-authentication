@@ -1,11 +1,11 @@
-require('dotenv').config();
-const express = require('express');
-const mongoose = require('mongoose');
-const cors = require('cors');
-const bodyParser = require('body-parser');
-const cookieParser = require('cookie-parser');
-const userRoute = require('./routes/userRoute');
-const errorHandler = require('./middleware/errorMiddleware');
+import 'dotenv/config';
+import express from 'express';
+import mongoose from 'mongoose';
+import cors from 'cors';
+import bodyParser from 'body-parser';
+import cookieParser from 'cookie-parser';
+import userRoute from './routes/userRoute.js';
+import errorHandler from './middleware/errorMiddleware.js';
 
 const app = express();
 
@@ -46,5 +46,5 @@ const start = async () => {
 
 start().then(() => console.log("Done."));
 
-// mongoose.connect(process.env.MONGO_URI).then(() => app.listen(port, () => {
+// mongoose.connect(process..env.MONGO_URI).then(() => app.listen(port, () => {
 //     console.log(`Server is running on port ${port}`)})).catch(error => console.log(error));

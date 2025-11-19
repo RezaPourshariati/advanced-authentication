@@ -1,6 +1,11 @@
-const nodemailer = require('nodemailer');
-const hbs = require('nodemailer-express-handlebars'); // hbs stands for 'handlebars'
-const path = require('path');
+import nodemailer from 'nodemailer';
+import hbs from 'nodemailer-express-handlebars'; // hbs stands for 'handlebars'
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+// ES Module equivalent of __dirname
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 
 const sendEmail = async (subject, send_to, sent_from, reply_to, template, name, link) => {
@@ -20,10 +25,10 @@ const sendEmail = async (subject, send_to, sent_from, reply_to, template, name, 
     const handlebarOptions = {
         viewEngine: {
             extName: ".handlebars",
-            partialsDir: path.resolve('./views'),
+            partialsDir: path.resolve(__dirname, '../views'),
             defaultLayout: false
         },
-        viewPath: path.resolve('./views'),
+        viewPath: path.resolve(__dirname, '../views'),
         extName: ".handlebars"
     }
 
@@ -48,4 +53,4 @@ const sendEmail = async (subject, send_to, sent_from, reply_to, template, name, 
     })
 };
 
-module.exports = sendEmail;
+export default sendEmail;
