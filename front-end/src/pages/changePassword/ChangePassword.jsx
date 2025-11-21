@@ -80,7 +80,6 @@ const ChangePassword = () => {
                                         Password</button>
                                 )}
                             </form>
-
                         </Card>
                     </div>
                 </div>
