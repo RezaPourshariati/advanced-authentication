@@ -6,7 +6,7 @@ const Layout = ({children}) => {
     return (
         <>
             <Header/>
-            <div className='--pad' style={{minHeight: '80vh'}}>
+            <div className='max-w-full mx-auto px-5' style={{minHeight: '80vh'}}>
                 {children}
             </div>
             <Footer/>

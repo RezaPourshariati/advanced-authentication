@@ -1,4 +1,3 @@
-import './UserList.scss';
 import PageMenu from "../../components/pageMenu/PageMenu";
 import UserStats from "../../components/userStats/UserStats";
 import Search from "../../components/search/Search";
@@ -79,10 +78,10 @@ const UserList = () => {
                     <PageMenu/>
                     <UserStats/>
 
-                    <div className="user-list">
+                    <div className="text-[#333]">
                         {isLoading && <Spinner/>}
-                        <div className="table">
-                            <div className="--flex-between">
+                        <div className="p-[5px] w-full overflow-x-auto [&_.search]:w-full [&_.search]:max-w-[300px]">
+                            <div className="flex justify-between items-center">
                                 <span>
                                     <h3>All Users</h3>
                                 </span>
@@ -91,7 +90,7 @@ const UserList = () => {
 
                             {/* Table */}
                             {!isLoading && users.length === 0 ? (<p>No user found...</p>) : (
-                                <table>
+                                <table className="border-collapse w-full text-[1.4rem] [&_thead]:border-t-2 [&_thead]:border-b-2 [&_thead]:border-[#1f93ff] [&_th]:border [&_th]:border-[#eee] [&_th]:align-top [&_th]:text-left [&_th]:p-2 [&_td]:align-top [&_td]:text-left [&_td]:p-2 [&_td.icons]:flex [&_td.icons]:justify-start [&_td.icons]:items-center [&_td.icons>*]:mr-[7px] [&_td.icons>*]:cursor-pointer [&_td.icons>*]:align-middle [&_td.icons>*]:self-center [&_tr]:border-b [&_tr]:border-[#ccc] [&_tr:nth-child(even)]:bg-white [&_tbody_tr:hover]:bg-[rgba(121,136,149,0.3)]">
                                     <thead>
                                     <tr>
                                         <th>S/N</th>

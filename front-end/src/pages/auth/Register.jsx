@@ -1,6 +1,5 @@
 import {useEffect, useState} from "react";
 import Card from "../../components/card/Card";
-import styles from './auth.module.scss'; // import './auth.module.scss';
 import {Link, useNavigate} from "react-router-dom";
 import PasswordInput from "../../components/passwordInput/PasswordInput";
 import {TiUserAddOutline} from "react-icons/ti";
@@ -95,11 +94,11 @@ const Register = () => {
 
     return (
         <>
-            <div className={`container ${styles.auth}`}>
+            <div className="container min-h-screen flex justify-center items-center">
                 {isLoading && <Loader/>}
                 <Card>
-                    <div className={styles.form}>
-                        <div className='--flex-center'>
+                    <div className="w-[35rem] p-6 animate-[slide-up_0.5s_ease] bg-white [&_h2]:text-[#ff4500] [&_h2]:text-center [&_form_input[type='text']]:block [&_form_input[type='email']]:block [&_form_input[type='password']]:block [&_form_input[type='text']]:text-[1.6rem] [&_form_input[type='email']]:text-[1.6rem] [&_form_input[type='password']]:text-[1.6rem] [&_form_input]:font-light [&_form_input]:p-4 [&_form_input]:my-4 [&_form_input]:mx-auto [&_form_input]:w-full [&_form_input]:border [&_form_input]:border-[#ccc] [&_form_input]:border-b-[3px] [&_form_input]:rounded [&_form_input]:outline-none [&_form_input:focus]:shadow-[0_1rem_2rem_rgba(0,0,0,0.1)] [&_form_input:focus]:border-b-[3px] [&_form_input:focus]:border-b-[#55c57a] [&_form_input:focus:invalid]:border-b-[#ff7730] [&_form_.links]:flex [&_form_.links]:justify-between [&_form_.links]:my-[5px] [&_form_p]:text-center [&_form_p]:my-4 [&_form_p]:transition-all [&_form_p]:duration-200 [&_form_p]:text-[#007bff] [&_form_p:hover]:text-[#ff4500] [&_form_p:hover]:cursor-pointer">
+                        <div className='flex justify-center items-center'>
                             <TiUserAddOutline size={60} color='orangered'/>
                         </div>
                         <h2 style={{marginBottom: '4rem'}}>Register</h2>
@@ -118,28 +117,28 @@ const Register = () => {
                                 return false;
                             }}/>
                             {/* Password Strength */}
-                            <Card cardClass={styles.group}>
+                            <Card cardClass="border border-[#1f93ff] p-[5px] mb-[5px]">
                                 <ul className='form-list'>
                                     <li>
-                                        <span className={styles.indicator}
+                                        <span className="flex justify-start items-center text-[10px]"
                                               style={{color: `${uppercase ? 'yellowgreen' : `${style}`}`}}>
                                             {switchIcon(uppercase)} &nbsp; Lowercase and Uppercase
                                         </span>
                                     </li>
                                     <li>
-                                        <span className={styles.indicator}
+                                        <span className="flex justify-start items-center text-[10px]"
                                               style={{color: `${num ? 'yellowgreen' : `${style}`}`}}>
                                             {switchIcon(num)} &nbsp; Number(0-9)
                                         </span>
                                     </li>
                                     <li>
-                                        <span className={styles.indicator}
+                                        <span className="flex justify-start items-center text-[10px]"
                                               style={{color: `${specialCharacter ? 'yellowgreen' : `${style}`}`}}>
                                             {switchIcon(specialCharacter)} &nbsp; Special Character(!@#$%^&*)
                                         </span>
                                     </li>
                                     <li>
-                                        <span className={styles.indicator}
+                                        <span className="flex justify-start items-center text-[10px]"
                                               style={{color: `${passLength ? 'yellowgreen' : `${style}`}`}}>
                                             {switchIcon(passLength)} &nbsp; At least 8 Character
                                         </span>
@@ -147,11 +146,11 @@ const Register = () => {
                                 </ul>
                             </Card>
 
-                            <button type='submit' className='--btn --btn-primary --btn-block'>Register</button>
+                            <button type='submit' className='text-[1.6rem] font-medium text-white px-2 py-1.5 mx-[5px] mr-0 mb-0 border border-transparent rounded-md cursor-pointer flex justify-center items-center transition-all duration-300 shadow-lg w-full bg-[#007bff] hover:bg-[#504acc]'>Register</button>
 
                         </form>
 
-                        <span className={styles.register}>
+                        <span className="flex justify-center items-center mt-4">
                             <Link to='/'>Home</Link>
                             <p>&nbsp; Already have an account? &nbsp;</p>
                             <Link to='/login'>Login</Link>

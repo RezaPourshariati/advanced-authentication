@@ -1,4 +1,3 @@
-import './PasswordInput.scss';
 import {useState} from "react";
 import {AiOutlineEye, AiOutlineEyeInvisible} from "react-icons/ai";
 
@@ -11,10 +10,10 @@ const PasswordInput = ({placeholder, value, onChange, name, onPaste}) => {
 
     return (
         <>
-            <div className='password'>
+            <div className='relative text-gray-500'>
                 <input type={showPassword ? "text" : "password"} placeholder={placeholder} name={name} value={value}
                        onChange={onChange} onPaste={onPaste} required/>
-                <div className='icon' onClick={togglePassword}>
+                <div className='absolute top-4 right-4 cursor-pointer' onClick={togglePassword}>
                     {showPassword ? (<AiOutlineEye size={22}/>) : (<AiOutlineEyeInvisible size={22}/>)}
                 </div>
             </div>

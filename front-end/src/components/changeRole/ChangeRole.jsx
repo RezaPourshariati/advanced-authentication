@@ -35,9 +35,10 @@ const ChangeRole = ({id, email}) => {
 
     return (
         <>
-            <div className="sort">
-                <form className="--flex-start" onSubmit={(e) => changeRole(e, id, userRole)}>
+            <div>
+                <form className="flex justify-start items-start" onSubmit={(e) => changeRole(e, id, userRole)}>
                     <select value={userRole} onChange={(e) => setUserRole(e.target.value)}
+                            className="text-[1.6rem] font-light px-2 py-1 my-0 mx-[5px] mr-0 mb-0 border-none border-b-2 border-[#777] outline-none"
                             style={{border: "1px solid yellowgreen", borderRadius: "6px"}}>
                         <option value="select roles">select roles</option>
                         <option value="subscriber">Subscriber</option>
@@ -45,7 +46,7 @@ const ChangeRole = ({id, email}) => {
                         <option value="admin">Admin</option>
                         <option value="suspended">Suspended</option>
                     </select>
-                    <button className='--btn --btn-primary'><FaCheck size={15}/></button>
+                    <button className='text-[1.6rem] font-medium text-white px-2 py-1.5 mx-[5px] mr-0 mb-0 border border-transparent rounded-md cursor-pointer flex justify-center items-center transition-all duration-300 shadow-lg bg-[#007bff] hover:bg-[#504acc]'><FaCheck size={15}/></button>
                 </form>
             </div>
         </>

@@ -1,4 +1,3 @@
-import './UsersStats.scss';
 import InfoBox from "../infoBox/InfoBox";
 import {FaUsers} from "react-icons/fa";
 import {BiUserCheck, BiUserMinus, BiUserX} from "react-icons/bi";
@@ -25,13 +24,13 @@ const UserStats = () => {
 
     return (
         <>
-            <div className="user-summary">
-                <h3 className='--mt'>User Stats</h3>
-                <div className="info-summary" style={{margin: "auto"}}>
-                    <InfoBox icon={icon1} title={'Total Users'} count={users.length} bgColor='card1'/>
-                    <InfoBox icon={icon2} title={'Verified Users'} count={verifiedUsers} bgColor='card2'/>
-                    <InfoBox icon={icon3} title={'Unverified Users'} count={unVerifiedUsers} bgColor='card3'/>
-                    <InfoBox icon={icon4} title={'Suspended Users'} count={suspendedUsers} bgColor='card4'/>
+            <div className="w-full">
+                <h3 className='mt-4'>User Stats</h3>
+                <div className="flex flex-wrap justify-center" style={{margin: "auto"}}>
+                    <InfoBox icon={icon1} title={'Total Users'} count={users.length} bgColor='bg-[#b624ff]'/>
+                    <InfoBox icon={icon2} title={'Verified Users'} count={verifiedUsers} bgColor='bg-[#32963d]'/>
+                    <InfoBox icon={icon3} title={'Unverified Users'} count={unVerifiedUsers} bgColor='bg-[#03a5fc]'/>
+                    <InfoBox icon={icon4} title={'Suspended Users'} count={suspendedUsers} bgColor='bg-[#c41849]'/>
                 </div>
             </div>
         </>

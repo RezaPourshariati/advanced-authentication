@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
+import tailwindcss from '@tailwindcss/vite'
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -8,6 +9,7 @@ export default defineConfig({
       // Enable JSX in .js files
       include: '**/*.{jsx,js}',
     }),
+    tailwindcss(),
   ],
   resolve: {
     // Prioritize .jsx extension over .js for JSX files

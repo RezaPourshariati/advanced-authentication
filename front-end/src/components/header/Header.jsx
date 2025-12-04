@@ -1,4 +1,3 @@
-import './Header.scss';
 import {BiLogIn} from "react-icons/bi";
 import {FaUserCircle} from "react-icons/fa";
 import {Link, NavLink} from "react-router-dom";
@@ -29,23 +28,23 @@ const Header = () => {
 
     return (
         <>
-            <header className='header'>
-                <nav>
-                    <div className="logo" onClick={goHome}>
+            <header className='bg-[#3f37c9] h-28 flex justify-center items-center w-full mx-auto px-5 pt-8'>
+                <nav className='w-full max-w-[1000px] text-white flex justify-between items-center'>
+                    <div className="flex justify-center items-center text-[3rem] text-white cursor-pointer" onClick={goHome}>
                         <BiLogIn size={40}/>
-                        <span style={{fontWeight: "bold"}}>R.Secure:One</span>
+                        <span className="font-bold">R.Secure:One</span>
                     </div>
 
-                    <ul className='home-links'>
+                    <ul className='mx-8 flex justify-center items-center [&>*]:ml-4 [&>*]:text-white [&_li_a]:text-white'>
                         <ShowOnLogin>
-                            <li className='--flex-center' style={{display: "flex", gap: '1.2rem', marginRight: '2rem'}}>
+                            <li className='flex justify-center items-center gap-5 mr-8'>
                                 <FaUserCircle size={20}/>
                                 <UserName/>
                             </li>
                         </ShowOnLogin>
                         <ShowOnLogout>
                             <li>
-                                <button className='--btn --btn-secondary'>
+                                <button className='text-[1.6rem] font-medium text-white px-2 py-1.5 mx-[5px] mr-0 mb-0 border border-transparent rounded-md cursor-pointer flex justify-center items-center transition-all duration-300 shadow-lg border-white bg-transparent hover:bg-[#504acc]'>
                                     <Link to='/login'>Login</Link>
                                 </button>
                             </li>
@@ -56,7 +55,7 @@ const Header = () => {
                                          className={({isActive}) => isActive ? 'active' : ''}>Profile</NavLink>
                             </li>
                             <li>
-                                <button className='--btn --btn-secondary' onClick={logoutUser}>Logout</button>
+                                <button className='text-[1.6rem] font-medium text-white px-2 py-1.5 mx-[5px] mr-0 mb-0 border border-transparent rounded-md cursor-pointer flex justify-center items-center transition-all duration-300 shadow-lg border-white bg-transparent hover:bg-[#504acc]' onClick={logoutUser}>Logout</button>
                             </li>
                         </ShowOnLogin>
                     </ul>

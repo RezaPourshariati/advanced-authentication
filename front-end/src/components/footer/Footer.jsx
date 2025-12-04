@@ -1,8 +1,8 @@
 const Footer = () => {
     return (
         <>
-            <hr className='--color-dark'/>
-            <div className='--flex-center --py2 --bg-grey'>
+            <hr className='border-[#333]'/>
+            <div className='flex justify-center items-center py-8 bg-[#eee]'>
                 <p>All Rights Reserved. &copy; 2023</p>
             </div>
         </>

@@ -1,6 +1,5 @@
 import {useEffect, useState} from "react";
 import Card from "../../components/card/Card";
-import styles from './auth.module.scss';
 import {Link, useNavigate, useParams} from "react-router-dom";
 import {GrInsecure} from "react-icons/gr";
 import {useDispatch, useSelector} from "react-redux";
@@ -38,11 +37,11 @@ const LoginWithCode = () => {
     }, [isLoggedIn, isSuccess, dispatch, navigate]);
 
     return (<>
-        <div className={`container ${styles.auth}`}>
+        <div className="container min-h-screen flex justify-center items-center">
             {isLoading && <Loader/>}
             <Card>
-                <div className={styles.form}>
-                    <div className='--flex-center'>
+                <div className="w-[35rem] p-6 animate-[slide-up_0.5s_ease] bg-white [&_h2]:text-[#ff4500] [&_h2]:text-center [&_form_input[type='text']]:block [&_form_input[type='email']]:block [&_form_input[type='password']]:block [&_form_input[type='text']]:text-[1.6rem] [&_form_input[type='email']]:text-[1.6rem] [&_form_input[type='password']]:text-[1.6rem] [&_form_input]:font-light [&_form_input]:p-4 [&_form_input]:my-4 [&_form_input]:mx-auto [&_form_input]:w-full [&_form_input]:border [&_form_input]:border-[#ccc] [&_form_input]:border-b-[3px] [&_form_input]:rounded [&_form_input]:outline-none [&_form_input:focus]:shadow-[0_1rem_2rem_rgba(0,0,0,0.1)] [&_form_input:focus]:border-b-[3px] [&_form_input:focus]:border-b-[#55c57a] [&_form_input:focus:invalid]:border-b-[#ff7730]">
+                    <div className='flex justify-center items-center'>
                         <GrInsecure size={35} color='#999'/>
                     </div>
                     <h2 style={{marginBottom: '4rem', color: 'green'}}>Enter Access Code</h2>
@@ -54,9 +53,9 @@ const LoginWithCode = () => {
                         <input type="text" placeholder='Access Code' name='loginCode' value={loginCode}
                                onChange={(e) => setLoginCode(e.target.value)} required/>
 
-                        <button type='submit' className='--btn --btn-primary --btn-block'>Proceed to Login</button>
+                        <button type='submit' className='text-[1.6rem] font-medium text-white px-2 py-1.5 mx-[5px] mr-0 mb-0 border border-transparent rounded-md cursor-pointer flex justify-center items-center transition-all duration-300 shadow-lg w-full bg-[#007bff] hover:bg-[#504acc]'>Proceed to Login</button>
 
-                        <div className={styles.links}>
+                        <div className="flex justify-between my-[5px]">
                             <p><Link to='/'>Home</Link></p>
                             <p onClick={sendUserLoginCode}>Resend Code</p>
                         </div>
