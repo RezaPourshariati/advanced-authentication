@@ -34,7 +34,7 @@ const Forgot = () => {
                         <div className='flex justify-center items-center'>
                             <AiOutlineMail size={35} color='#999'/>
                         </div>
-                        <h2 style={{marginBottom: '4rem'}}>Forgot Password</h2>
+                        <h2     style={{marginBottom: '4rem'}}>Forgot Password</h2>
 
                         <form onSubmit={forgot}>
                             <label htmlFor="email"><p>Please Enter Email Address for Resetting Password!</p></label>

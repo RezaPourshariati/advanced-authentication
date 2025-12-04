@@ -1,15 +1,18 @@
 {
   "name": "back-end",
   "version": "1.0.0",
-  "description": "",
+  "description": "Advanced Authentication Backend API",
   "type": "module",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js",
-    "back-end": "nodemon server.js"
+    "back-end": "nodemon server.js",
+    "dev": "nodemon --exec ts-node --esm server.ts",
+    "build": "tsc",
+    "type-check": "tsc --noEmit"
   },
-  "keywords": [],
+  "keywords": ["authentication", "express", "mongodb", "jwt", "nodejs"],
   "author": "",
   "license": "ISC",
   "dependencies": {
@@ -29,6 +32,16 @@
     "ua-parser-js": "^2.0.6"
   },
   "devDependencies": {
-    "nodemon": "^3.1.11"
+    "@types/bcryptjs": "^2.4.6",
+    "@types/cookie-parser": "^1.4.7",
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.0",
+    "@types/jsonwebtoken": "^9.0.7",
+    "@types/node": "^22.10.5",
+    "@types/nodemailer": "^6.4.17",
+    "@types/ua-parser-js": "^0.7.39",
+    "nodemon": "^3.1.11",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
   }
 }

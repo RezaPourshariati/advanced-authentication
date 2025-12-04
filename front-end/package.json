@@ -2,6 +2,7 @@
   "name": "front-end",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "dependencies": {
     "@react-oauth/google": "^0.12.2",
     "@reduxjs/toolkit": "^2.10.1",
@@ -19,15 +20,21 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "tsc && vite build",
     "preview": "vite preview",
-    "test": "vitest"
+    "test": "vitest",
+    "type-check": "tsc --noEmit"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^14.6.1",
+    "@types/node": "^22.10.5",
+    "@types/react": "^19.0.6",
+    "@types/react-dom": "^19.0.3",
     "@vitejs/plugin-react": "^5.1.1",
+    "typescript": "^5.9.3",
+    "@tailwindcss/vite": "^4.1.17",
     "vite": "^7.2.2",
     "vitest": "^4.0.10"
   }

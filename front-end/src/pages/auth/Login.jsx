@@ -5,8 +5,8 @@ import {Link, useNavigate} from "react-router-dom";
 import PasswordInput from "../../components/passwordInput/PasswordInput";
 import {useDispatch, useSelector} from "react-redux";
 import {toast} from "react-toastify";
-import {validateEmail} from "../../redux/features/auth/authService";
-import {login, loginWithGoogle, RESET, sendLoginCode} from "../../redux/features/auth/authSlice";
+import {validateEmail} from "@/redux/features/auth/authService.js";
+import {login, loginWithGoogle, RESET, sendLoginCode} from "@/redux/features/auth/authSlice.js";
 import Loader from "../../components/loader/Loader";
 import {GoogleLogin} from "@react-oauth/google";
 

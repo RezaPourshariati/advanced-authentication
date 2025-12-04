@@ -12,12 +12,17 @@
     "dev": "concurrently -n \"backend,frontend\" -c \"blue,green\" \"pnpm --filter back-end run back-end\" \"pnpm --filter front-end run dev\"",
     "dev:frontend": "pnpm --filter front-end run dev",
     "dev:backend": "pnpm --filter back-end run back-end",
+    "dev:backend:ts": "pnpm --filter back-end run dev",
     "start": "concurrently -n \"backend,frontend\" -c \"blue,green\" \"pnpm --filter back-end run start\" \"pnpm --filter front-end run dev\"",
     "build": "pnpm --filter front-end run build",
     "build:frontend": "pnpm --filter front-end run build",
+    "build:backend": "pnpm --filter back-end run build",
     "preview": "pnpm --filter front-end run preview",
     "test": "pnpm --filter front-end run test",
-    "clean": "pnpm --filter front-end exec rm -rf dist && pnpm --filter back-end exec rm -rf dist"
+    "clean": "pnpm --filter front-end exec rm -rf dist && pnpm --filter back-end exec rm -rf dist",
+    "type-check": "pnpm --filter front-end run type-check && pnpm --filter back-end run type-check",
+    "type-check:frontend": "pnpm --filter front-end run type-check",
+    "type-check:backend": "pnpm --filter back-end run type-check"
   },
   "keywords": [
     "authentication",
@@ -29,6 +34,13 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@antfu/eslint-config": "^5.3.0",
+    "@unocss/eslint-plugin": "^66.5.1",
+    "cross-env": "^10.1.0",
+    "eslint": "^9.35.0",
+    "eslint-plugin-format": "^1.1.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3",
     "concurrently": "^9.2.1"
   }
 }

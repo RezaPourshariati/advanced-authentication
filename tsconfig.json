@@ -1,0 +1,39 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "lib": ["ES2022"],
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "allowJs": true,
+    "checkJs": false,
+    "strict": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "isolatedModules": true
+  },
+  "references": [
+    { "path": "./front-end" },
+    { "path": "./back-end" }
+  ],
+  "exclude": [
+    "node_modules",
+    "bin",
+    "data",
+    "build",
+    "dist",
+    "./**/*.js",
+    "./**/*.jsx"
+  ],
+  "include": [
+    "env.d.ts",
+    "./**/*.d.ts",
+    "./src/**/*",
+    "./**/*.ts",
+    "./**/*.tsx",
+    "./**/*.vue"
+  ],
+}
+

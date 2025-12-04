@@ -1,63 +1,45 @@
 # Dependencies
 node_modules/
-.pnp
-.pnp.js
+*/node_modules/
 
-# Testing
-coverage/
-*.lcov
-.nyc_output
-
-# Production builds
+# Build outputs
 dist/
 build/
-*.local
+*.tsbuildinfo
 
 # Environment variables
 .env
 .env.local
-.env.development.local
-.env.test.local
-.env.production.local
 .env*.local
 
 # Logs
-logs/
+logs
 *.log
 npm-debug.log*
+pnpm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
 
-# Lock files (keep pnpm-lock.yaml, ignore others)
-package-lock.json
-yarn.lock
-
-# OS files
-.DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-ehthumbs.db
-Thumbs.db
+# Editor directories
+.vscode/
+.idea/
 *.swp
 *.swo
 *~
+.DS_Store
 
-# IDE files
-.idea/
-.vscode/
-*.sublime-project
-*.sublime-workspace
-*.code-workspace
+# TypeScript
+*.tsbuildinfo
+.tsc-cache/
 
-# Temporary files
-*.tmp
-*.temp
-.cache/
+# Testing
+coverage/
+
+# Production
+/dist
+/build
 
 # Misc
-*.pem
-*.key
+.cache
+.temp
+.tmp
