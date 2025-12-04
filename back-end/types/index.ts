@@ -1,5 +1,5 @@
-import { Request } from 'express'
-import { Document } from 'mongoose'
+import type { Request } from 'express'
+import type { Document } from 'mongoose'
 
 // User Document Interface
 export interface IUser extends Document {
@@ -94,4 +94,3 @@ export interface ErrorResponse {
   message: string
   stack?: string
 }
-

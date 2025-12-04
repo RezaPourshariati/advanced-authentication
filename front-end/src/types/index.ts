@@ -118,9 +118,8 @@ export interface AsyncThunkConfig {
 }
 
 // Root State (will be inferred from store)
-export type RootState = {
+export interface RootState {
   auth: AuthState
   email: EmailState
   filter: FilterState
 }
-
